@@ -1,0 +1,13 @@
+1. tiny-cnn:
+	commit: 77d80a8;
+	date: 2016.01.22;
+	url: https://github.com/nyanp/tiny-cnn
+2. tiny-dnn:
+	commit: 6281c1b
+	date: 2016.12.03
+	url: https://github.com/tiny-dnn/tiny-dnn
+3. libsvm: libsvm-322.zip
+	commit: 88a1881
+	version: v322
+	date: 2016.12.22
+	url: https://github.com/cjlin1/libsvm/releases
