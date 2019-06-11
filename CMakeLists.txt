@@ -7,8 +7,10 @@ set(CMAKE_CXX_STANDARD 14)
 
 message(${CMAKE_CXX_COMPILER_ID})
 
+add_subdirectory(opencv)
 add_subdirectory(cimg_test)
 add_subdirectory(dlib)
+add_subdirectory(eigen_test)
 
 
 MESSAGE("make files end")
