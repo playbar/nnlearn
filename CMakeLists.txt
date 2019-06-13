@@ -13,6 +13,7 @@ add_subdirectory(dlib)
 add_subdirectory(eigen_test)
 add_subdirectory(nn_test)
 add_subdirectory(libyuv)
+add_subdirectory(simd_test)
 
 MESSAGE("make files end")
 
