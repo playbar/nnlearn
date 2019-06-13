@@ -283,7 +283,7 @@ int test_mat_transpose()
 	const std::vector<std::string> image_name{"test_data/test1.jpg", "test_data/ret_mat_transpose.jpg"};
 #else
 	const std::vector<std::string> image_name{ "../../eigen_test/demo/test1.jpg",
-		"../../eigen_test/demo/ret_mat_transpose.jpg" };
+		"./ret_mat_transpose.jpg" };
 #endif
 	cv::Mat mat_src = cv::imread(image_name[0]);
 	if (!mat_src.data) {

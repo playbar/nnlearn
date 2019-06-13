@@ -11,6 +11,7 @@ add_subdirectory(opencv)
 add_subdirectory(cimg_test)
 add_subdirectory(dlib)
 add_subdirectory(eigen_test)
+add_subdirectory(nn_test)
 
 
 MESSAGE("make files end")

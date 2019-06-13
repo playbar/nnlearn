@@ -77,7 +77,7 @@ void PCA<T>::calculate_covariance_matrix(std::vector<std::vector<T>>& covar, boo
 		covar[i].resize(dsize, (T)0.);
 	}
 
-	Size_ size{ data[0].size(), data.size() };
+	Size_ size{ (int)data[0].size(), (int)data.size() };
 
 	T* tdst = covar[0].data();
 	int delta_cols = mean.size();
@@ -283,7 +283,8 @@ int PCA<T>::gemm(const std::vector<std::vector<T>>& src1, const std::vector<std:
 	CHECK(typeid(T).name() == typeid(double).name() || typeid(T).name() == typeid(float).name()); // T' type can only be float or double
 	CHECK(beta == 0. && src3.size() == 0);
 
-	Size_ a_size{ src1[0].size(), src1.size() }, d_size{ src2[0].size(), a_size.height };
+	Size_ a_size{ (int)src1[0].size(), (int)src1.size() };
+    Size_ d_size{ (int)src2[0].size(), (int)a_size.height };
 	int len{ (int)src2.size() };
 	CHECK(a_size.height == len);
 	CHECK(d_size.height == dst.size() && d_size.width == dst[0].size());
@@ -308,17 +309,17 @@ int PCA<T>::gemm(const std::vector<T>& src1, const std::vector<std::vector<T>>& 
 	CHECK(flags == 0 || flags == 1); // when flags = 1, GEMM_2_T
 	CHECK(typeid(T).name() == typeid(double).name() || typeid(T).name() == typeid(float).name()); // T' type can only be float or double
 
-	Size_ a_size{ src1.size(), 1 }, d_size;
+	Size_ a_size{ (int)src1.size(), 1 }, d_size;
 	int len = 0;
 
 	switch (flags) {
 	case 0:
-		d_size = Size_{ src2[0].size(), a_size.height };
+		d_size = Size_{ (int)src2[0].size(), a_size.height };
 		len = src2.size();
 		CHECK(a_size.width == len);
 		break;
 	case 1:
-		d_size = Size_{ src2.size(), a_size.height };
+		d_size = Size_{ (int)src2.size(), a_size.height };
 		len = src2[0].size();
 		CHECK(a_size.width == len);
 		break;

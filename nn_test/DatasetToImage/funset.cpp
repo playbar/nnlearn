@@ -12,7 +12,7 @@ int ORLFacestoImage()
 #ifdef _MSC_VER
 	const std::string path{ "E:/GitCode/NN_Test/data/database/ORL_Faces/" };
 #else
-	const std::string path{ "data/database/ORL_Faces/" };
+	const std::string path{ "../../nn_test/data/database/ORL_Faces/" };
 #endif
 	cv::Mat dst;
 	int height, width;

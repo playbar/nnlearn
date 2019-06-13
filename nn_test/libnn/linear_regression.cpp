@@ -6,6 +6,7 @@
 #include <random>
 #include <algorithm>
 #include <numeric>
+#include <cfloat>
 
 namespace ANN {
 

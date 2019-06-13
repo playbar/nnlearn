@@ -8,6 +8,8 @@
 #include <windows.h>
 #else
 #include <unistd.h>
+#include <cmath>
+
 #endif
 
 #include "BP.hpp"

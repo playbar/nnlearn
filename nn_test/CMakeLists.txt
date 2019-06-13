@@ -1,0 +1,5 @@
+add_subdirectory(DatasetToImage)
+add_subdirectory(Math)
+add_subdirectory(nn_test)
+add_subdirectory(tiny_cnn_test)
+add_subdirectory(tiny_dnn_test)
