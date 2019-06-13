@@ -12,7 +12,7 @@ add_subdirectory(cimg_test)
 add_subdirectory(dlib)
 add_subdirectory(eigen_test)
 add_subdirectory(nn_test)
-
+add_subdirectory(libyuv)
 
 MESSAGE("make files end")
 
