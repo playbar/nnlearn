@@ -1,0 +1,66 @@
+﻿  tif_xfile.cpp
+  ximabmp.cpp
+  ximadsp.cpp
+..\ximadsp.cpp(2910): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  ximaenc.cpp
+e:\gitcode\cximage_test\cximage702_full\cximage\ximajas.h(69): warning C4267: “return”: 从“size_t”转换到“int32_t”，可能丢失数据
+e:\gitcode\cximage_test\cximage702_full\cximage\ximajas.h(71): warning C4267: “return”: 从“size_t”转换到“int32_t”，可能丢失数据
+e:\gitcode\cximage_test\cximage702_full\cximage\ximaraw.h(79): warning C4267: “return”: 从“size_t”转换到“int32_t”，可能丢失数据
+e:\gitcode\cximage_test\cximage702_full\cximage\ximaraw.h(82): warning C4267: “return”: 从“size_t”转换到“int32_t”，可能丢失数据
+e:\gitcode\cximage_test\cximage702_full\cximage\ximapsd.h(79): warning C4267: “return”: 从“size_t”转换到“int32_t”，可能丢失数据
+  ximaexif.cpp
+..\ximaexif.cpp(101): warning C4267: “=”: 从“size_t”转换到“int32_t”，可能丢失数据
+..\ximaexif.cpp(127): warning C4267: “=”: 从“size_t”转换到“int32_t”，可能丢失数据
+  ximage.cpp
+  ximagif.cpp
+  ximahist.cpp
+  ximaico.cpp
+  ximainfo.cpp
+  ximaint.cpp
+  ximajas.cpp
+e:\gitcode\cximage_test\cximage702_full\cximage\ximajas.h(69): warning C4267: “return”: 从“size_t”转换到“int32_t”，可能丢失数据
+e:\gitcode\cximage_test\cximage702_full\cximage\ximajas.h(71): warning C4267: “return”: 从“size_t”转换到“int32_t”，可能丢失数据
+  ximajbg.cpp
+  ximajpg.cpp
+  ximalpha.cpp
+  ximalyr.cpp
+  ximamng.cpp
+..\ximamng.cpp(45): warning C4267: “=”: 从“size_t”转换到“mng_uint32”，可能丢失数据
+..\ximamng.cpp(54): warning C4267: “=”: 从“size_t”转换到“mng_uint32”，可能丢失数据
+  ximapal.cpp
+  ximapcx.cpp
+  ximapng.cpp
+..\ximapng.cpp(264): warning C4267: “参数”: 从“size_t”转换到“int32_t”，可能丢失数据
+..\ximapng.cpp(282): warning C4267: “参数”: 从“size_t”转换到“int32_t”，可能丢失数据
+  正在生成代码...
+  正在编译...
+  ximapsd.cpp
+..\ximapsd.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+e:\gitcode\cximage_test\cximage702_full\cximage\ximapsd.h(79): warning C4267: “return”: 从“size_t”转换到“int32_t”，可能丢失数据
+  ximaraw.cpp
+e:\gitcode\cximage_test\cximage702_full\cximage\ximaraw.h(79): warning C4267: “return”: 从“size_t”转换到“int32_t”，可能丢失数据
+e:\gitcode\cximage_test\cximage702_full\cximage\ximaraw.h(82): warning C4267: “return”: 从“size_t”转换到“int32_t”，可能丢失数据
+  ximasel.cpp
+  ximaska.cpp
+  ximatga.cpp
+  ximath.cpp
+  ximatif.cpp
+  ximatran.cpp
+  ximawbmp.cpp
+  ximawmf.cpp
+..\ximawmf.cpp(298): warning C4267: “=”: 从“size_t”转换到“uint32_t”，可能丢失数据
+..\ximawmf.cpp(330): warning C4267: “=”: 从“size_t”转换到“uint32_t”，可能丢失数据
+..\ximawmf.cpp(345): warning C4267: “=”: 从“size_t”转换到“uint32_t”，可能丢失数据
+..\ximawmf.cpp(411): warning C4267: “初始化”: 从“size_t”转换到“int32_t”，可能丢失数据
+..\ximawmf.cpp(422): warning C4267: “=”: 从“size_t”转换到“int32_t”，可能丢失数据
+  ximawnd.cpp
+..\ximawnd.cpp(207): warning C4244: “初始化”: 从“SIZE_T”转换到“uint32_t”，可能丢失数据
+  xmemfile.cpp
+  正在生成代码...
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(1193,5): warning MSB8012: TargetPath(E:\GitCode\CxImage_Test\cximage702_full\CxImage\CxImageDLL\.\Release\cximagecrtdll.dll) does not match the Linker's OutputFile property value (E:\GitCode\CxImage_Test\cximage702_full\bin\cximagecrt.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(1195,5): warning MSB8012: TargetName(cximagecrtdll) does not match the Linker's OutputFile property value (cximagecrt). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+  png.lib(pngread.obj) : 找到 MSIL .netmodule 或使用 /GL 编译的模块；正在使用 /LTCG 重新启动链接；将 /LTCG 添加到链接命令行以改进链接器性能
+     正在创建库 .\Release/cximagecrt.lib 和对象 .\Release/cximagecrt.exp
+  正在生成代码
+  已完成代码的生成
+  cximagecrtdll.vcxproj -> E:\GitCode\CxImage_Test\cximage702_full\CxImage\CxImageDLL\.\Release\cximagecrtdll.dll

@@ -1,0 +1,9 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (.\Release\) contains files shared from another project (cximagecrtdll.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  ximabmp.cpp
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(1193,5): warning MSB8012: TargetPath(E:\GitCode\CxImage_Test\cximage702_full\CxImage\CxImageDLL\.\Release\cximagemfcdll.dll) does not match the Linker's OutputFile property value (E:\GitCode\CxImage_Test\cximage702_full\bin\cximage.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(1195,5): warning MSB8012: TargetName(cximagemfcdll) does not match the Linker's OutputFile property value (cximage). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+  png.lib(pngread.obj) : 找到 MSIL .netmodule 或使用 /GL 编译的模块；正在使用 /LTCG 重新启动链接；将 /LTCG 添加到链接命令行以改进链接器性能
+     正在创建库 .\Release/cximage.lib 和对象 .\Release/cximage.exp
+  正在生成代码
+  已完成代码的生成
+  cximagemfcdll.vcxproj -> E:\GitCode\CxImage_Test\cximage702_full\CxImage\CxImageDLL\.\Release\cximagemfcdll.dll
