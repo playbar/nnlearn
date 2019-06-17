@@ -1,0 +1,37 @@
+1. tesseract-ocr: release, 3.04
+	commit: 228317c;
+	date: 2015.07.24;
+	url: https://github.com/tesseract-ocr/tesseract/releases
+2. zlib:
+	version: 1.2.8
+	url: http://www.zlib.net/
+3. libpng:
+	version: 1.6.16
+	url: http://www.libpng.org/pub/png/libpng.html
+4. libjpeg:
+	version: 9a
+	url: http://www.ijg.org/files/
+5. libtiff:
+	version: 4.0.3
+	url: http://www.simplesystems.org/libtiff/
+6. gitlib:
+	version: 5.1.1
+	url: https://sourceforge.net/projects/giflib/
+7. leptonica
+	version: 1.71
+	url: http://www.leptonica.org/download.html
+8. freetype:
+	version: 2.5.5
+	url: https://www.freetype.org/download.html
+9. TiRG:
+	date: 2014.04.29
+	url: https://sourceforge.net/projects/tirg/
+10. UTF-8 CPP:
+	date: 2014.08.26
+	url: https://sourceforge.net/projects/utfcpp/
+11. libjpeg-turbo:
+	commit: a4aa30d
+	date: 2019.02.14
+	version: 2.0.2
+	url: https://github.com/libjpeg-turbo/libjpeg-turbo
+
