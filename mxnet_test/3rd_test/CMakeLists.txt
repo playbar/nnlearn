@@ -1,0 +1,54 @@
+PROJECT(ThirdPartyLibrary_Test)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+
+# support C++11
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+# support C++14, when gcc version > 5.1, use -std=c++14 instead of c++1y
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
+
+IF(NOT CMAKE_BUILD_TYPE)
+	SET(CMAKE_BUILD_TYPE "Release")
+	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O2")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O2")
+ELSE()
+	SET(CMAKE_BUILD_TYPE "Debug")
+	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -O2")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -O2")
+ENDIF()
+MESSAGE(STATUS "cmake build type: ${CMAKE_BUILD_TYPE}")
+
+MESSAGE(STATUS "cmake current source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
+SET(PATH_TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/)
+SET(PATH_SRC_DMLC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/dmlc-core)
+SET(PATH_SRC_MSHADOW_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/mshadow)
+SET(PATH_SRC_OPENBLAS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/openblas)
+MESSAGE(STATUS "path test files: ${PATH_TEST_FILES}")
+
+# head file search path
+INCLUDE_DIRECTORIES(
+	${PATH_TEST_FILES}
+	${PATH_SRC_MSHADOW_FILES}
+	${PATH_SRC_DMLC_FILES}/include
+)
+
+
+# find dep library
+SET(DEP_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build CACHE PATH "dep library path")
+MESSAGE(STATUS "dep library dir: ${DEP_LIB_DIR}")
+LINK_DIRECTORIES(${DEP_LIB_DIR})
+
+# recursive query match files :*.cpp
+FILE(GLOB_RECURSE TEST_CPP_LIST ${PATH_TEST_FILES}/*.cpp)
+FILE(GLOB_RECURSE TEST_CC_LIST ${PATH_TEST_FILES}/*.cc)
+MESSAGE(STATUS "test cpp list: ${TEST_CPP_LIST} ${TEST_C_LIST}")
+
+# build executable program
+ADD_EXECUTABLE(ThirdPartyLibrary_Test ${TEST_CPP_LIST} ${TEST_CC_LIST})
+# add dependent library: static and dynamic
+TARGET_LINK_LIBRARIES(ThirdPartyLibrary_Test
+	${DEP_LIB_DIR}/libdmlc.a
+	${DEP_LIB_DIR}/libopenblas.so
+	pthread
+)
+

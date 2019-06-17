@@ -1,0 +1,2 @@
+add_subdirectory(3rd_test)
+add_subdirectory(mxnet_test)
