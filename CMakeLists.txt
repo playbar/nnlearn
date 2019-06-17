@@ -14,6 +14,7 @@ add_subdirectory(eigen_test)
 add_subdirectory(nn_test)
 add_subdirectory(libyuv)
 add_subdirectory(simd_test)
+add_subdirectory(vigra)
 
 MESSAGE("make files end")
 
