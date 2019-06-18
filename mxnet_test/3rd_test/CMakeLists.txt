@@ -1,4 +1,4 @@
-PROJECT(ThirdPartyLibrary_Test)
+PROJECT(maxnet_3rd_test)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 
 # support C++11
@@ -20,15 +20,16 @@ MESSAGE(STATUS "cmake build type: ${CMAKE_BUILD_TYPE}")
 
 MESSAGE(STATUS "cmake current source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
 SET(PATH_TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/)
-SET(PATH_SRC_DMLC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/dmlc-core)
-SET(PATH_SRC_MSHADOW_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/mshadow)
-SET(PATH_SRC_OPENBLAS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/openblas)
+SET(PATH_SRC_DMLC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../dmlc-core)
+SET(PATH_SRC_MSHADOW_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../mshadow)
+SET(PATH_SRC_OPENBLAS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../openblas)
 MESSAGE(STATUS "path test files: ${PATH_TEST_FILES}")
 
 # head file search path
 INCLUDE_DIRECTORIES(
 	${PATH_TEST_FILES}
 	${PATH_SRC_MSHADOW_FILES}
+	${PATH_SRC_OPENBLAS_FILES}
 	${PATH_SRC_DMLC_FILES}/include
 )
 
@@ -44,11 +45,11 @@ FILE(GLOB_RECURSE TEST_CC_LIST ${PATH_TEST_FILES}/*.cc)
 MESSAGE(STATUS "test cpp list: ${TEST_CPP_LIST} ${TEST_C_LIST}")
 
 # build executable program
-ADD_EXECUTABLE(ThirdPartyLibrary_Test ${TEST_CPP_LIST} ${TEST_CC_LIST})
+ADD_EXECUTABLE(3rd_test ${TEST_CPP_LIST} ${TEST_CC_LIST})
 # add dependent library: static and dynamic
-TARGET_LINK_LIBRARIES(ThirdPartyLibrary_Test
-	${DEP_LIB_DIR}/libdmlc.a
-	${DEP_LIB_DIR}/libopenblas.so
+TARGET_LINK_LIBRARIES(3rd_test
+	dmlc
+	openblas
 	pthread
 )
 

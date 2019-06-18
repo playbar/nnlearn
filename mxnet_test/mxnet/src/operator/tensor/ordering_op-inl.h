@@ -386,7 +386,7 @@ void TopKImpl(const RunContext &ctx,
   // Additional temp space for gpu full sorts for batch ids.
   temp_size += sizeof(int) * src.Size();
   // Temp space for cpu sorts.
-  temp_size = std::max(temp_size, sizeof(DType) * src.Size());
+  temp_size = std::max(temp_size, (size_t)(sizeof(DType) * src.Size()));
   size_t workspace_size = temp_size + sizeof(DType) * src.Size() + sizeof(int) * src.Size();
   if (param.ret_typ == topk_enum::kReturnMask) {
     workspace_size += sizeof(int) * batch_size * k + sizeof(DType) * batch_size * k;

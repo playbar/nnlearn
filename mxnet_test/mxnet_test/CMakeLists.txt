@@ -20,12 +20,12 @@ MESSAGE(STATUS "cmake build type: ${CMAKE_BUILD_TYPE}")
 
 MESSAGE(STATUS "cmake current source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
 SET(PATH_TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/)
-SET(PATH_SRC_DMLC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/dmlc-core)
-SET(PATH_SRC_MSHADOW_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/mshadow)
-SET(PATH_SRC_OPENBLAS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/openblas)
-SET(PATH_SRC_MXNET_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/mxnet)
-SET(PATH_SRC_TVM_FILES ${CMAKE_CURRENT_SOURCE_DIR}/./../../src/tvm)
-SET(PATH_SRC_DLPACK_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/dlpack)
+SET(PATH_SRC_DMLC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../dmlc-core)
+SET(PATH_SRC_MSHADOW_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../mshadow)
+SET(PATH_SRC_OPENBLAS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../openblas)
+SET(PATH_SRC_MXNET_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../mxnet)
+SET(PATH_SRC_TVM_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../tvm)
+SET(PATH_SRC_DLPACK_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../dlpack)
 MESSAGE(STATUS "path test files: ${PATH_TEST_FILES}")
 
 # don't use opencv in mxnet
@@ -93,11 +93,11 @@ FILE(GLOB_RECURSE TEST_CC_LIST ${PATH_TEST_FILES}/*.cc)
 MESSAGE(STATUS "test cpp list: ${TEST_CPP_LIST} ${TEST_C_LIST}")
 
 # build executable program
-ADD_EXECUTABLE(MXNet_Test ${TEST_CPP_LIST} ${TEST_CC_LIST})
+ADD_EXECUTABLE(MXNet_Test ${TEST_CPP_LIST} ${TEST_CC_LIST} ${interface})
 # add dependent library: static and dynamic
 TARGET_LINK_LIBRARIES(MXNet_Test
 	mxnet
-	${DEP_LIB_DIR}/libopenblas.so
+	openblas
 	pthread
 	rt # undefined reference to shm_open, need to be placed in front of opencv library
 )
