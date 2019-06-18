@@ -1,0 +1,54 @@
+1. caffe: branch: windows
+	commit: 509dae0;
+	date: 2018.01.03;
+	url: https://github.com/BVLC/caffe
+2. boost: binary library, boost_1_58_0-msvc-12.0-64.exe
+	version: 1.58.0
+	date: 2015.04.17
+	url:
+		http://www.boost.org/
+		http://www.boost.org/users/history/version_1_58_0.html
+		https://sourceforge.net/projects/boost/files/boost-binaries/1.58.0/
+3. protobuf: protobuf-cpp-3.2.0.zip
+	commit: 593e917
+	version: v3.2
+	date: 2017.01.28
+	url: https://github.com/google/protobuf/releases
+4. glog: 
+	commit: da816ea
+	version: master
+	date: 2017.03.07
+	url: https://github.com/google/glog
+5. gflags:
+	commit: f8a0efe
+	version: 2.2.0
+	date: 2016.11.26
+	url: https://github.com/gflags/gflags/releases
+6. leveldb:
+	commit: 915d663
+	version: 1.18
+	date: 2015.07.29
+	url: https://github.com/bureau14/leveldb
+7. lmdb:
+	commit: 14cff07
+	version: 0.9.19
+	date: 2016.12.29
+	url: https://github.com/LMDB/lmdb/releases
+8. hdf5: hdf5-1.10.0-patch1.zip
+	version: 1.10.0
+	url: https://support.hdfgroup.org/HDF5/release/obtainsrc.html
+9. snappy:
+	commit: 2d99bd1
+	version: 1.1.4
+	date: 2017.01.27
+	url: https://github.com/google/snappy/releases
+10. openblas:
+	commit: 85636ff
+	version: 0.2.19
+	date: 2016.09.01
+	url: https://github.com/xianyi/OpenBLAS/releases
+11. opencv:
+	commit: 59975db
+	version: 2.4.13
+	date: 2016.05.16
+	url: https://github.com/opencv/opencv/releases
