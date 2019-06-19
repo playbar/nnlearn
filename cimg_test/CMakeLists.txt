@@ -4,3 +4,5 @@ add_executable(CImgtest
 target_include_directories(CImgtest PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
         )
+
+add_subdirectory(examples)
