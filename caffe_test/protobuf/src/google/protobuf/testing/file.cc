@@ -38,33 +38,41 @@
 #ifdef _MSC_VER
 #define WIN32_LEAN_AND_MEAN  // yeah, right
 #include <windows.h>         // Find*File().  :(
-#include <io.h>
-#include <direct.h>
+// #include <direct.h>
 #else
 #include <dirent.h>
 #include <unistd.h>
 #endif
 #include <errno.h>
 
+#include <google/protobuf/io/io_win32.h>
+#include <google/protobuf/stubs/logging.h>
+
 namespace google {
 namespace protobuf {
 
 #ifdef _WIN32
-#define mkdir(name, mode) mkdir(name)
 // Windows doesn't have symbolic links.
 #define lstat stat
-#ifndef F_OK
-#define F_OK 00  // not defined by MSVC for whatever reason
+// DO NOT include <io.h>, instead create functions in io_win32.{h,cc} and import
+// them like we do below.
 #endif
+
+#ifdef _WIN32
+using google::protobuf::io::win32::access;
+using google::protobuf::io::win32::chdir;
+using google::protobuf::io::win32::fopen;
+using google::protobuf::io::win32::mkdir;
+using google::protobuf::io::win32::stat;
 #endif
 
 bool File::Exists(const string& name) {
   return access(name.c_str(), F_OK) == 0;
 }
 
-bool File::ReadFileToString(const string& name, string* output) {
+bool File::ReadFileToString(const string& name, string* output, bool text_mode) {
   char buffer[1024];
-  FILE* file = fopen(name.c_str(), "rb");
+  FILE* file = fopen(name.c_str(), text_mode ? "rt" : "rb");
   if (file == NULL) return false;
 
   while (true) {
@@ -113,6 +121,9 @@ void File::WriteStringToFileOrDie(const string& contents, const string& name) {
 }
 
 bool File::CreateDir(const string& name, int mode) {
+  if (!name.empty()) {
+    GOOGLE_CHECK_OK(name[name.size() - 1] != '.');
+  }
   return mkdir(name.c_str(), mode) == 0;
 }
 

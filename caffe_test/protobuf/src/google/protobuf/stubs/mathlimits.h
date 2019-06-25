@@ -43,23 +43,30 @@
 #ifndef UTIL_MATH_MATHLIMITS_H__
 #define UTIL_MATH_MATHLIMITS_H__
 
-// GCC 4.9 has a bug that makes it impossible to use isinf and isnan when both
-// <math.h> and <cmath> get pulled into the same translation unit.
-// Unfortunately it is difficult to prevent this from happening, so to work
-// around the problem we use std::isinf and std::isnan from <cmath> for C++11
-// builds and otherwise use the plain isinf and isnan functions from <math.h>.
 // Note that for Windows we do something different because it does not support
 // the plain isinf and isnan.
 #if __cplusplus >= 201103L
+// GCC 4.9 has a bug that makes isinf and isnan ambigious when both <math.h>
+// and <cmath> get pulled into the same translation unit. We use the ones in
+// std:: namespace explicitly for C++11
 #include <cmath>
+#define GOOGLE_PROTOBUF_USE_STD_CMATH
+#elif _GLIBCXX_USE_C99_MATH && !_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC
+// libstdc++ <cmath> header undefines the global macros and put functions in
+// std:: namespace even before C++11. Use the ones in std:: instead too.
+#include <cmath>
+#define GOOGLE_PROTOBUF_USE_STD_CMATH
 #else
 #include <math.h>
 #endif
+
 #include <string.h>
 
 #include <cfloat>
 
 #include <google/protobuf/stubs/common.h>
+
+#include <google/protobuf/port_def.inc>
 
 // ========================================================================= //
 
@@ -168,43 +175,43 @@ template<typename T> struct MathLimits {
   static bool IsPosInf(const Type /*x*/) { return false; } \
   static bool IsNegInf(const Type /*x*/) { return false; }
 
-#define DECL_SIGNED_INT_LIMITS(IntType, UnsignedIntType) \
-template<> \
-struct LIBPROTOBUF_EXPORT MathLimits<IntType> { \
-  typedef IntType Type; \
-  typedef UnsignedIntType UnsignedType; \
-  static const bool kIsSigned = true; \
-  static const bool kIsInteger = true; \
-  static const Type kPosMin = 1; \
-  static const Type kPosMax = SIGNED_INT_MAX(Type); \
-  static const Type kMin = SIGNED_INT_MIN(Type); \
-  static const Type kMax = kPosMax; \
-  static const Type kNegMin = -1; \
-  static const Type kNegMax = kMin; \
-  static const int kMin10Exp = 0; \
-  static const int kMax10Exp = SIGNED_MAX_10_EXP(Type); \
-  static const Type kEpsilon = 1; \
-  static const Type kStdError = 0; \
-  DECL_INT_LIMIT_FUNCS \
-};
+#define DECL_SIGNED_INT_LIMITS(IntType, UnsignedIntType)  \
+  template <>                                             \
+  struct PROTOBUF_EXPORT MathLimits<IntType> {            \
+    typedef IntType Type;                                 \
+    typedef UnsignedIntType UnsignedType;                 \
+    static const bool kIsSigned = true;                   \
+    static const bool kIsInteger = true;                  \
+    static const Type kPosMin = 1;                        \
+    static const Type kPosMax = SIGNED_INT_MAX(Type);     \
+    static const Type kMin = SIGNED_INT_MIN(Type);        \
+    static const Type kMax = kPosMax;                     \
+    static const Type kNegMin = -1;                       \
+    static const Type kNegMax = kMin;                     \
+    static const int kMin10Exp = 0;                       \
+    static const int kMax10Exp = SIGNED_MAX_10_EXP(Type); \
+    static const Type kEpsilon = 1;                       \
+    static const Type kStdError = 0;                      \
+    DECL_INT_LIMIT_FUNCS                                  \
+  };
 
-#define DECL_UNSIGNED_INT_LIMITS(IntType) \
-template<> \
-struct LIBPROTOBUF_EXPORT MathLimits<IntType> { \
-  typedef IntType Type; \
-  typedef IntType UnsignedType; \
-  static const bool kIsSigned = false; \
-  static const bool kIsInteger = true; \
-  static const Type kPosMin = 1; \
-  static const Type kPosMax = UNSIGNED_INT_MAX(Type); \
-  static const Type kMin = 0; \
-  static const Type kMax = kPosMax; \
-  static const int kMin10Exp = 0; \
-  static const int kMax10Exp = UNSIGNED_MAX_10_EXP(Type); \
-  static const Type kEpsilon = 1; \
-  static const Type kStdError = 0; \
-  DECL_INT_LIMIT_FUNCS \
-};
+#define DECL_UNSIGNED_INT_LIMITS(IntType)                   \
+  template <>                                               \
+  struct PROTOBUF_EXPORT MathLimits<IntType> {              \
+    typedef IntType Type;                                   \
+    typedef IntType UnsignedType;                           \
+    static const bool kIsSigned = false;                    \
+    static const bool kIsInteger = true;                    \
+    static const Type kPosMin = 1;                          \
+    static const Type kPosMax = UNSIGNED_INT_MAX(Type);     \
+    static const Type kMin = 0;                             \
+    static const Type kMax = kPosMax;                       \
+    static const int kMin10Exp = 0;                         \
+    static const int kMax10Exp = UNSIGNED_MAX_10_EXP(Type); \
+    static const Type kEpsilon = 1;                         \
+    static const Type kStdError = 0;                        \
+    DECL_INT_LIMIT_FUNCS                                    \
+  };
 
 DECL_SIGNED_INT_LIMITS(signed char, unsigned char)
 DECL_SIGNED_INT_LIMITS(signed short int, unsigned short int)
@@ -229,7 +236,7 @@ DECL_UNSIGNED_INT_LIMITS(unsigned long long int)
 // For non-Windows builds we use the std:: versions of isinf and isnan if they
 // are available; see the comment about <cmath> at the top of this file for the
 // details on why we need to do this.
-#if __cplusplus >= 201103L
+#ifdef GOOGLE_PROTOBUF_USE_STD_CMATH
 #define ISINF std::isinf
 #define ISNAN std::isnan
 #else
@@ -238,7 +245,7 @@ DECL_UNSIGNED_INT_LIMITS(unsigned long long int)
 #endif
 
 // ========================================================================= //
-#ifdef WIN32  // Lacks built-in isnan() and isinf()
+#if defined(_WIN32) && !defined(__MINGW32__) // Lacks built-in isnan() and isinf()
 #define DECL_FP_LIMIT_FUNCS \
   static bool IsFinite(const Type x) { return _finite(x); } \
   static bool IsNaN(const Type x) { return _isnan(x); } \
@@ -258,29 +265,29 @@ DECL_UNSIGNED_INT_LIMITS(unsigned long long int)
 // such constants are not considered to be primitive-type constants by gcc.
 // CAVEAT: Hence, they are going to be initialized only during
 // the global objects construction time.
-#define DECL_FP_LIMITS(FP_Type, PREFIX) \
-template<> \
-struct LIBPROTOBUF_EXPORT MathLimits<FP_Type> { \
-  typedef FP_Type Type; \
-  typedef FP_Type UnsignedType; \
-  static const bool kIsSigned = true; \
-  static const bool kIsInteger = false; \
-  static const Type kPosMin; \
-  static const Type kPosMax; \
-  static const Type kMin; \
-  static const Type kMax; \
-  static const Type kNegMin; \
-  static const Type kNegMax; \
-  static const int kMin10Exp = PREFIX##_MIN_10_EXP; \
-  static const int kMax10Exp = PREFIX##_MAX_10_EXP; \
-  static const Type kEpsilon; \
-  static const Type kStdError; \
-  static const int kPrecisionDigits = PREFIX##_DIG; \
-  static const Type kNaN; \
-  static const Type kPosInf; \
-  static const Type kNegInf; \
-  DECL_FP_LIMIT_FUNCS \
-};
+#define DECL_FP_LIMITS(FP_Type, PREFIX)               \
+  template <>                                         \
+  struct PROTOBUF_EXPORT MathLimits<FP_Type> {        \
+    typedef FP_Type Type;                             \
+    typedef FP_Type UnsignedType;                     \
+    static const bool kIsSigned = true;               \
+    static const bool kIsInteger = false;             \
+    static const Type kPosMin;                        \
+    static const Type kPosMax;                        \
+    static const Type kMin;                           \
+    static const Type kMax;                           \
+    static const Type kNegMin;                        \
+    static const Type kNegMax;                        \
+    static const int kMin10Exp = PREFIX##_MIN_10_EXP; \
+    static const int kMax10Exp = PREFIX##_MAX_10_EXP; \
+    static const Type kEpsilon;                       \
+    static const Type kStdError;                      \
+    static const int kPrecisionDigits = PREFIX##_DIG; \
+    static const Type kNaN;                           \
+    static const Type kPosInf;                        \
+    static const Type kNegInf;                        \
+    DECL_FP_LIMIT_FUNCS                               \
+  };
 
 DECL_FP_LIMITS(float, FLT)
 DECL_FP_LIMITS(double, DBL)
@@ -294,5 +301,7 @@ DECL_FP_LIMITS(long double, LDBL)
 // ========================================================================= //
 }  // namespace protobuf
 }  // namespace google
+
+#include <google/protobuf/port_undef.inc>
 
 #endif  // UTIL_MATH_MATHLIMITS_H__

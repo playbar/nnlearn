@@ -63,8 +63,7 @@ class MapTestUtil {
 
   // Check that all fields have the values that they should have after
   // SetMapFieldsInitialized() is called.
-  static void ExpectMapFieldsSetInitialized(
-      const unittest::TestMap& message);
+  static void ExpectMapFieldsSetInitialized(const unittest::TestMap& message);
 
   // Expect that the message is modified as would be expected from
   // ModifyMapFields().
@@ -106,9 +105,16 @@ class MapReflectionTester {
   void ExpectClearViaReflection(const Message& message);
   void ExpectClearViaReflectionIterator(Message* message);
   void ExpectMapEntryClearViaReflection(Message* message);
+  void GetMapValueViaMapReflection(Message* message,
+                                   const std::string& field_name,
+                                   const MapKey& map_key, MapValueRef* map_val);
+  Message* GetMapEntryViaReflection(Message* message,
+                                    const std::string& field_name, int index);
+  MapIterator MapBegin(Message* message, const std::string& field_name);
+  MapIterator MapEnd(Message* message, const std::string& field_name);
 
  private:
-  const FieldDescriptor* F(const string& name);
+  const FieldDescriptor* F(const std::string& name);
 
   const Descriptor* base_descriptor_;
 
@@ -154,6 +160,6 @@ class MapReflectionTester {
 };
 
 }  // namespace protobuf
-
 }  // namespace google
+
 #endif  // GOOGLE_PROTOBUF_MAP_TEST_UTIL_H__

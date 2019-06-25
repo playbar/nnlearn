@@ -4,7 +4,7 @@ add_subdirectory(hdf5)
 add_subdirectory(openblas)
 add_subdirectory(leveldb)
 add_subdirectory(lmdb)
-#add_subdirectory(protobuf/cmake)
+add_subdirectory(protobuf)
 add_subdirectory(snappy)
 add_subdirectory(3rd_test)
 

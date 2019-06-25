@@ -105,8 +105,8 @@ TARGET_LINK_LIBRARIES(caffe_3rd_test
 	gflags
 	lmdb
 	leveldb
-	protobuf
-	protoc
+	libprotobuf_caff
+	libprotoc_caff
 	snappy
 	boost_all
 	openblas

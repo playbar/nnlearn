@@ -39,15 +39,15 @@ namespace protobuf {
 namespace util {
 namespace converter {
 
-using google::protobuf::io::CodedOutputStream;
-using google::protobuf::io::StringOutputStream;
+using io::CodedOutputStream;
+using io::StringOutputStream;
 
 class JsonObjectWriterTest : public ::testing::Test {
  protected:
   JsonObjectWriterTest()
       : str_stream_(new StringOutputStream(&output_)),
         out_stream_(new CodedOutputStream(str_stream_)),
-        ow_(NULL) {}
+        ow_(nullptr) {}
 
   virtual ~JsonObjectWriterTest() {
     delete ow_;
@@ -55,7 +55,7 @@ class JsonObjectWriterTest : public ::testing::Test {
     delete str_stream_;
   }
 
-  string output_;
+  std::string output_;
   StringOutputStream* const str_stream_;
   CodedOutputStream* const out_stream_;
   JsonObjectWriter* ow_;
@@ -93,6 +93,12 @@ TEST_F(JsonObjectWriterTest, EmptyList) {
       ->EndObject();
   EXPECT_EQ("{\"test\":\"value\",\"empty\":[]}",
             output_.substr(0, out_stream_->ByteCount()));
+}
+
+TEST_F(JsonObjectWriterTest, EmptyObjectKey) {
+  ow_ = new JsonObjectWriter("", out_stream_);
+  ow_->StartObject("")->RenderString("", "value")->EndObject();
+  EXPECT_EQ("{\"\":\"value\"}", output_.substr(0, out_stream_->ByteCount()));
 }
 
 TEST_F(JsonObjectWriterTest, ObjectInObject) {
@@ -169,7 +175,7 @@ TEST_F(JsonObjectWriterTest, RenderPrimitives) {
 }
 
 TEST_F(JsonObjectWriterTest, BytesEncodesAsNonWebSafeBase64) {
-  string s;
+  std::string s;
   s.push_back('\377');
   s.push_back('\357');
   ow_ = new JsonObjectWriter("", out_stream_);

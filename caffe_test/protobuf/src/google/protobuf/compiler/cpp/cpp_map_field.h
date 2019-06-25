@@ -49,12 +49,11 @@ class MapFieldGenerator : public FieldGenerator {
   // implements FieldGenerator ---------------------------------------
   void GeneratePrivateMembers(io::Printer* printer) const;
   void GenerateAccessorDeclarations(io::Printer* printer) const;
-  void GenerateInlineAccessorDefinitions(io::Printer* printer,
-                                         bool is_inline) const;
+  void GenerateInlineAccessorDefinitions(io::Printer* printer) const;
   void GenerateClearingCode(io::Printer* printer) const;
   void GenerateMergingCode(io::Printer* printer) const;
   void GenerateSwappingCode(io::Printer* printer) const;
-  void GenerateConstructorCode(io::Printer* printer) const;
+  void GenerateConstructorCode(io::Printer* printer) const {}
   void GenerateCopyConstructorCode(io::Printer* printer) const;
   void GenerateMergeFromCodedStream(io::Printer* printer) const;
   void GenerateSerializeWithCachedSizes(io::Printer* printer) const;
@@ -63,12 +62,8 @@ class MapFieldGenerator : public FieldGenerator {
 
  private:
   // A helper for GenerateSerializeWithCachedSizes{,ToArray}.
-  void GenerateSerializeWithCachedSizes(
-      io::Printer* printer, const std::map<string, string>& variables) const;
-
-  const FieldDescriptor* descriptor_;
-  const bool dependent_field_;
-  std::map<string, string> variables_;
+  void GenerateSerializeWithCachedSizes(io::Printer* printer,
+                                        bool to_array) const;
 
   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(MapFieldGenerator);
 };
@@ -76,6 +71,6 @@ class MapFieldGenerator : public FieldGenerator {
 }  // namespace cpp
 }  // namespace compiler
 }  // namespace protobuf
-
 }  // namespace google
+
 #endif  // GOOGLE_PROTOBUF_COMPILER_CPP_MAP_FIELD_H__

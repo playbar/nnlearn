@@ -49,9 +49,9 @@ ExtensionGenerator::ExtensionGenerator(const string& root_class_name,
   if (descriptor->is_map()) {
     // NOTE: src/google/protobuf/compiler/plugin.cc makes use of cerr for some
     // error cases, so it seems to be ok to use as a back door for errors.
-    cerr << "error: Extension is a map<>!"
-         << " That used to be blocked by the compiler." << endl;
-    cerr.flush();
+    std::cerr << "error: Extension is a map<>!"
+         << " That used to be blocked by the compiler." << std::endl;
+    std::cerr.flush();
     abort();
   }
 }
@@ -59,8 +59,13 @@ ExtensionGenerator::ExtensionGenerator(const string& root_class_name,
 ExtensionGenerator::~ExtensionGenerator() {}
 
 void ExtensionGenerator::GenerateMembersHeader(io::Printer* printer) {
-  map<string, string> vars;
+  std::map<string, string> vars;
   vars["method_name"] = method_name_;
+  if (IsRetainedName(method_name_)) {
+    vars["storage_attribute"] = " NS_RETURNS_NOT_RETAINED";
+  } else {
+    vars["storage_attribute"] = "";
+  }
   SourceLocation location;
   if (descriptor_->GetSourceLocation(&location)) {
     vars["comments"] = BuildCommentsString(location, true);
@@ -72,15 +77,15 @@ void ExtensionGenerator::GenerateMembersHeader(io::Printer* printer) {
   vars["deprecated_attribute"] = GetOptionalDeprecatedAttribute(descriptor_, descriptor_->file());
   printer->Print(vars,
                  "$comments$"
-                 "+ (GPBExtensionDescriptor *)$method_name$$deprecated_attribute$;\n");
+                 "+ (GPBExtensionDescriptor *)$method_name$$storage_attribute$$deprecated_attribute$;\n");
 }
 
 void ExtensionGenerator::GenerateStaticVariablesInitialization(
     io::Printer* printer) {
-  map<string, string> vars;
+  std::map<string, string> vars;
   vars["root_class_and_method_name"] = root_class_and_method_name_;
   vars["extended_type"] = ClassName(descriptor_->containing_type());
-  vars["number"] = SimpleItoa(descriptor_->number());
+  vars["number"] = StrCat(descriptor_->number());
 
   std::vector<string> options;
   if (descriptor_->is_repeated()) options.push_back("GPBExtensionRepeated");
