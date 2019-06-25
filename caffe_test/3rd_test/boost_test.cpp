@@ -1,6 +1,6 @@
 #include "boost_test.hpp"
 #include <iostream>
-#include <boost/shared_ptr.hpp>
+#include "boost/shared_ptr.hpp"
 
 class implementation {
 public:
