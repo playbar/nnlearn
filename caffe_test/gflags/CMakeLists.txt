@@ -14,9 +14,9 @@
 ##
 ## When this project is a subproject (GFLAGS_IS_SUBPROJECT is TRUE), the default
 ## settings are such that only the static single-threaded library is built without
-## installation of the gflags files. The "gflags" target is in this case an ALIAS
+## installation of the gflags files. The "gflags::gflags" target is in this case an ALIAS
 ## library target for the "gflags_nothreads_static" library target. Targets which
-## depend on the gflags library should link to the "gflags" library target.
+## depend on the gflags library should link to the "gflags::gflags" library target.
 ##
 ## Example CMakeLists.txt of user project which requires separate gflags installation:
 ##   cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
@@ -26,7 +26,7 @@
 ##   find_package(gflags REQUIRED)
 ##
 ##   add_executable(foo src/foo.cc)
-##   target_link_libraries(foo gflags)
+##   target_link_libraries(foo gflags::gflags)
 ##
 ## Example CMakeLists.txt of user project which requires separate single-threaded static gflags installation:
 ##   cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
@@ -36,7 +36,7 @@
 ##   find_package(gflags COMPONENTS nothreads_static)
 ##
 ##   add_executable(foo src/foo.cc)
-##   target_link_libraries(foo gflags)
+##   target_link_libraries(foo gflags::gflags)
 ##
 ## Example CMakeLists.txt of super-project which contains gflags source tree:
 ##   cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
@@ -46,7 +46,7 @@
 ##   add_subdirectory(gflags)
 ##
 ##   add_executable(foo src/foo.cc)
-##   target_link_libraries(foo gflags)
+##   target_link_libraries(foo gflags::gflags)
 ##
 ## Variables to configure the source files:
 ## - GFLAGS_IS_A_DLL
@@ -70,34 +70,37 @@
 ## - GFLAGS_INSTALL_SHARED_LIBS
 ## - GFLAGS_INSTALL_STATIC_LIBS
 
-cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.0.2 FATAL_ERROR)
 
 if (POLICY CMP0042)
   cmake_policy (SET CMP0042 NEW)
 endif ()
 
+if (POLICY CMP0048)
+  cmake_policy (SET CMP0048 NEW)
+endif ()
+
 # ----------------------------------------------------------------------------
 # includes
-set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include (utils)
+include ("${CMAKE_CURRENT_SOURCE_DIR}/cmake/utils.cmake")
 
 # ----------------------------------------------------------------------------
 # package information
 set (PACKAGE_NAME        "gflags")
-set (PACKAGE_VERSION     "2.2.0")
+set (PACKAGE_VERSION     "2.2.2")
 set (PACKAGE_STRING      "${PACKAGE_NAME} ${PACKAGE_VERSION}")
 set (PACKAGE_TARNAME     "${PACKAGE_NAME}-${PACKAGE_VERSION}")
 set (PACKAGE_BUGREPORT   "https://github.com/gflags/gflags/issues")
 set (PACKAGE_DESCRIPTION "A commandline flags library that allows for distributed flags.")
 set (PACKAGE_URL         "http://gflags.github.io/gflags")
 
-project (${PACKAGE_NAME} CXX)
-if (CMAKE_VERSION VERSION_LESS 100)
+project (${PACKAGE_NAME} VERSION ${PACKAGE_VERSION} LANGUAGES CXX)
+if (CMAKE_VERSION VERSION_LESS 3.4)
   # C language still needed because the following required CMake modules
   # (or their dependencies, respectively) are not correctly handling
-  # the case where only CXX is enabled.
-  # - CheckTypeSize.cmake (fixed in CMake 3.1, cf. http://www.cmake.org/Bug/view.php?id=14056)
-  # - FindThreads.cmake (--> CheckIncludeFiles.cmake <--)
+  # the case where only CXX is enabled
+  # - CheckTypeSize.cmake (fixed in CMake 3.1, cf. https://cmake.org/Bug/view.php?id=14056)
+  # - FindThreads.cmake   (fixed in CMake 3.4, cf. https://cmake.org/Bug/view.php?id=14905)
   enable_language (C)
 endif ()
 
@@ -209,7 +212,7 @@ endif ()
 if (INCLUDE_DIR MATCHES "^\\.\\.[/\\]")
   message (FATAL_ERROR "[GFLAGS_]INCLUDE_DIR must not start with parent directory reference (../)")
 endif ()
-set (GFLAGS_INCLUDE_DIR "${INCLUDE_DIR}")
+set (GFLAGS_INCLUDE_DIR "gflags")
 
 # ----------------------------------------------------------------------------
 # system checks
@@ -225,12 +228,22 @@ endif ()
 
 if (MSVC)
   set (HAVE_SYS_TYPES_H 1)
-  set (HAVE_STDINT_H    1)
   set (HAVE_STDDEF_H    1) # used by CheckTypeSize module
-  set (HAVE_INTTYPES_H  0)
   set (HAVE_UNISTD_H    0)
   set (HAVE_SYS_STAT_H  1)
   set (HAVE_SHLWAPI_H   1)
+  if (MSVC_VERSION VERSION_LESS 1600)
+    check_include_file_cxx ("stdint.h" HAVE_STDINT_H)
+    bool_to_int (HAVE_STDINT_H)  # used in #if directive
+  else ()
+    set (HAVE_STDINT_H 1)
+  endif ()
+  if (MSVC_VERSION VERSION_LESS 1800)
+    check_include_file_cxx ("inttypes.h" HAVE_INTTYPES_H)
+    bool_to_int (HAVE_INTTYPES_H)  # used in #if directive
+  else ()
+    set (HAVE_INTTYPES_H 1)
+  endif ()
 else ()
   foreach (fname IN ITEMS unistd stdint inttypes sys/types sys/stat fnmatch)
     string (TOUPPER "${fname}" FNAME)
@@ -239,13 +252,13 @@ else ()
       check_include_file_cxx ("${fname}.h" HAVE_${FNAME}_H)
     endif ()
   endforeach ()
+  if (NOT HAVE_FNMATCH_H AND OS_WINDOWS)
+    check_include_file_cxx ("shlwapi.h" HAVE_SHLWAPI_H)
+  endif ()
   # the following are used in #if directives not #ifdef
   bool_to_int (HAVE_STDINT_H)
   bool_to_int (HAVE_SYS_TYPES_H)
   bool_to_int (HAVE_INTTYPES_H)
-  if (NOT HAVE_FNMATCH_H AND OS_WINDOWS)
-    check_include_file_cxx ("shlwapi.h" HAVE_SHLWAPI_H)
-  endif ()
 endif ()
 
 gflags_define (STRING INTTYPES_FORMAT "Format of integer types: \"C99\" (uint32_t), \"BSD\" (u_int32_t), \"VC7\" (__int32)" "")
@@ -343,6 +356,7 @@ else ()
 endif ()
 
 set (PRIVATE_HDRS
+  "defines.h"
   "config.h"
   "util.h"
   "mutex.h"
@@ -393,14 +407,17 @@ if (NOT GFLAGS_IS_SUBPROJECT)
   set (CMAKE_LIBRARY_OUTPUT_DIRECTORY "lib")
   set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "lib")
 endif ()
+# Set postfixes for generated libraries based on buildtype.
+set(CMAKE_RELEASE_POSTFIX "")
+set(CMAKE_DEBUG_POSTFIX "_debug")
 
 # ----------------------------------------------------------------------------
 # installation directories
 if (OS_WINDOWS)
-  set (RUNTIME_INSTALL_DIR Bin)
-  set (LIBRARY_INSTALL_DIR Lib)
-  set (INCLUDE_INSTALL_DIR Include)
-  set (CONFIG_INSTALL_DIR  CMake)
+  set (RUNTIME_INSTALL_DIR "bin")
+  set (LIBRARY_INSTALL_DIR "lib")
+  set (INCLUDE_INSTALL_DIR "include")
+  set (CONFIG_INSTALL_DIR  "lib/cmake/${PACKAGE_NAME}")
   set (PKGCONFIG_INSTALL_DIR)
 else ()
   set (RUNTIME_INSTALL_DIR bin)
@@ -481,11 +498,15 @@ if (GFLAGS_IS_SUBPROJECT)
   foreach (type IN ITEMS static shared)
     foreach (opts IN ITEMS "_nothreads" "")
       if (TARGET gflags${opts}_${type})
+        # Define "gflags" alias for super-projects treating targets of this library as part of their own project
+        # (also for backwards compatibility with gflags 2.2.1 which only defined this alias)
         add_library (gflags ALIAS gflags${opts}_${type})
+        # Define "gflags::gflags" alias for projects that support both find_package(gflags) and add_subdirectory(gflags)
+        add_library (gflags::gflags ALIAS gflags${opts}_${type})
         break ()
       endif ()
     endforeach ()
-    if (TARGET gflags)
+    if (TARGET gflags::gflags)
        break ()
     endif ()
   endforeach ()
@@ -501,14 +522,24 @@ configure_file (cmake/version.cmake.in "${PROJECT_BINARY_DIR}/${PACKAGE_NAME}-co
 if (BUILD_SHARED_LIBS AND INSTALL_SHARED_LIBS)
   foreach (opts IN ITEMS "" _nothreads)
     if (BUILD_gflags${opts}_LIB)
-      install (TARGETS gflags${opts}_shared DESTINATION ${LIBRARY_INSTALL_DIR} EXPORT ${EXPORT_NAME})
+      install (TARGETS gflags${opts}_shared
+               EXPORT ${EXPORT_NAME}
+               RUNTIME DESTINATION ${RUNTIME_INSTALL_DIR}
+               LIBRARY DESTINATION ${LIBRARY_INSTALL_DIR}
+               ARCHIVE DESTINATION ${LIBRARY_INSTALL_DIR}
+      )
     endif ()
   endforeach ()
 endif ()
 if (BUILD_STATIC_LIBS AND INSTALL_STATIC_LIBS)
   foreach (opts IN ITEMS "" _nothreads)
     if (BUILD_gflags${opts}_LIB)
-      install (TARGETS gflags${opts}_static DESTINATION ${LIBRARY_INSTALL_DIR} EXPORT ${EXPORT_NAME})
+      install (TARGETS gflags${opts}_static
+               EXPORT ${EXPORT_NAME}
+               RUNTIME DESTINATION ${RUNTIME_INSTALL_DIR}
+               LIBRARY DESTINATION ${LIBRARY_INSTALL_DIR}
+               ARCHIVE DESTINATION ${LIBRARY_INSTALL_DIR}
+      )
     endif ()
   endforeach ()
 endif ()
@@ -524,7 +555,16 @@ if (INSTALL_HEADERS)
     FILES "${PROJECT_BINARY_DIR}/${PACKAGE_NAME}-config-version.cmake"
     DESTINATION ${CONFIG_INSTALL_DIR}
   )
-  install (EXPORT ${EXPORT_NAME} DESTINATION ${CONFIG_INSTALL_DIR})
+  install (
+    EXPORT ${EXPORT_NAME}
+    NAMESPACE ${PACKAGE_NAME}::
+    DESTINATION ${CONFIG_INSTALL_DIR}
+  )
+  install (
+    EXPORT ${EXPORT_NAME}
+    FILE ${PACKAGE_NAME}-nonamespace-targets.cmake
+    DESTINATION ${CONFIG_INSTALL_DIR}
+  )
   if (UNIX)
     install (PROGRAMS src/gflags_completions.sh DESTINATION ${RUNTIME_INSTALL_DIR})
   endif ()
@@ -538,7 +578,15 @@ endif ()
 # ----------------------------------------------------------------------------
 # support direct use of build tree
 set (INSTALL_PREFIX_REL2CONFIG_DIR .)
-export (TARGETS ${TARGETS} FILE "${PROJECT_BINARY_DIR}/${EXPORT_NAME}.cmake")
+export (
+  TARGETS ${TARGETS}
+  NAMESPACE ${PACKAGE_NAME}::
+  FILE "${PROJECT_BINARY_DIR}/${EXPORT_NAME}.cmake"
+)
+export (
+  TARGETS ${TARGETS}
+  FILE "${PROJECT_BINARY_DIR}/${PACKAGE_NAME}-nonamespace-targets.cmake"
+)
 if (REGISTER_BUILD_DIR)
   export (PACKAGE ${PACKAGE_NAME})
 endif ()
@@ -551,7 +599,6 @@ configure_file (cmake/config.cmake.in "${PROJECT_BINARY_DIR}/${PACKAGE_NAME}-con
 # testing - MUST follow the generation of the build tree config file
 if (BUILD_TESTING)
   include (CTest)
-  enable_testing ()
   add_subdirectory (test)
 endif ()
 
@@ -571,7 +618,8 @@ if (BUILD_PACKAGING)
                      "\n  BUILD_STATIC_LIBS=ON"
                      "\n  INSTALL_HEADERS=ON"
                      "\n  INSTALL_SHARED_LIBS=ON"
-                     "\n  INSTALL_STATIC_LIBS=ON")
+                     "\n  INSTALL_STATIC_LIBS=ON"
+    )
   endif ()
 
   # default package generators
@@ -683,3 +731,11 @@ if (BUILD_PACKAGING)
   include (CPack)
 
 endif () # BUILD_PACKAGING
+
+if (NOT GFLAGS_IS_SUBPROJECT AND NOT TARGET uninstall)
+  configure_file (
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" @ONLY
+  )
+  add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+endif ()

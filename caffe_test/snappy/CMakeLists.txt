@@ -81,7 +81,7 @@ target_sources(snappy
     "${PROJECT_SOURCE_DIR}/snappy-sinksource.cc"
     "${PROJECT_SOURCE_DIR}/snappy-stubs-internal.cc"
     "${PROJECT_SOURCE_DIR}/snappy.cc"
-    "${PROJECT_BINARY_DIR}/config.h"
+    "${PROJECT_SOURCE_DIR}/config.h"
 
   # Only CMake 3.3+ supports PUBLIC sources in targets exported by "install".
   $<$<VERSION_GREATER:CMAKE_VERSION,3.2>:PUBLIC>
@@ -91,12 +91,11 @@ target_sources(snappy
     $<INSTALL_INTERFACE:include/snappy-sinksource.h>
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/snappy.h>
     $<INSTALL_INTERFACE:include/snappy.h>
-    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/snappy-stubs-public.h>
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/snappy-stubs-public.h>
     $<INSTALL_INTERFACE:include/snappy-stubs-public.h>
 )
 target_include_directories(snappy
   PUBLIC
-    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include>
 )

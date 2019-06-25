@@ -1,6 +1,34 @@
 [![Build Status](https://travis-ci.org/gflags/gflags.svg?branch=master)](https://travis-ci.org/gflags/gflags)
 [![Build status](https://ci.appveyor.com/api/projects/status/4ctod566ysraus74/branch/master?svg=true)](https://ci.appveyor.com/project/schuhschuh/gflags/branch/master)
 
+The documentation of the gflags library is available online at https://gflags.github.io/gflags/.
+
+
+11 November 2018
+----------------
+
+I've just released gflags 2.2.2.
+
+This maintenance release improves lives of Bazel users (no more "config.h" leaking into global include paths),
+fixes build with recent MinGW versions, and silences a number of static code analyzer and compiler warnings.
+The build targets exported by the CMake configuration of this library are now also prefixed by the package
+name "gflags::" following a more recent (unwritten) CMake convention. The unprefixed target names are still
+supported to avoid that dependent projects have to be modified due to this change in imported target names.
+
+Please report any further issues with this release using the GitHub issue tracker.
+
+
+11 July 2017
+------------
+
+I've just released gflags 2.2.1.
+
+This maintenance release primarily fixes build issues on Windows and
+false alarms reported by static code analyzers.
+
+Please report any further issues with this release using the GitHub issue tracker.
+
+
 25 November 2016
 ----------------
 

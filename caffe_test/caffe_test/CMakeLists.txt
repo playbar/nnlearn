@@ -1,4 +1,3 @@
-PROJECT(Caffe_Test)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 
 # support C++11
@@ -53,7 +52,24 @@ ENDIF()
 # head file search path
 INCLUDE_DIRECTORIES(
 	${PATH_TEST_FILES}
-	${PATH_OPENCV}/include
+	${PROJECT_SOURCE_DIR}/opencv/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/calib3d/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/core/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/dnn/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/features2d/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/flann/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/highgui/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/imgcodecs/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/imgproc/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/ml/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/objdetect/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/photo/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/shape/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/stitching/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/superres/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/videoio/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/video/include
+	${PROJECT_SOURCE_DIR}/opencv/modules/videostab/include
 	${PATH_SRC_GFLAGS_FILES}/build/include
 	${PATH_SRC_GLOG_FILES}/build
 	${PATH_SRC_HDF5_FILES}/src
