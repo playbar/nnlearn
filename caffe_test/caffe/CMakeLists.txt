@@ -46,11 +46,11 @@ if(MSVC)
 else()
   caffe_option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 endif()
-caffe_option(BUILD_python "Build Python wrapper" ON)
+caffe_option(BUILD_python "Build Python wrapper" OFF)
 set(python_version "2" CACHE STRING "Specify which Python version to use")
 caffe_option(BUILD_matlab "Build Matlab wrapper" OFF)
 caffe_option(BUILD_docs   "Build documentation" ON IF UNIX OR APPLE)
-caffe_option(BUILD_python_layer "Build the Caffe Python layer" ON)
+caffe_option(BUILD_python_layer "Build the Caffe Python layer" OFF)
 caffe_option(USE_OPENCV "Build with OpenCV support" ON)
 caffe_option(USE_LEVELDB "Build with levelDB" ON)
 caffe_option(USE_LMDB "Build with lmdb" ON)
@@ -126,8 +126,8 @@ add_subdirectory(src/caffe)
 add_subdirectory(tools)
 add_subdirectory(examples)
 add_subdirectory(python)
-add_subdirectory(matlab)
-add_subdirectory(docs)
+#add_subdirectory(matlab)
+#add_subdirectory(docs)
 
 # ---[ Linter target
 add_custom_target(lint COMMAND ${CMAKE_COMMAND} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -P ${PROJECT_SOURCE_DIR}/cmake/lint.cmake)
@@ -149,9 +149,9 @@ configure_file(
     ${CMAKE_CURRENT_BINARY_DIR}/cmake/Uninstall.cmake
     IMMEDIATE @ONLY)
 
-add_custom_target(uninstall
-    COMMAND ${CMAKE_COMMAND} -P
-    ${CMAKE_CURRENT_BINARY_DIR}/cmake/Uninstall.cmake)
+#add_custom_target(uninstall
+#    COMMAND ${CMAKE_COMMAND} -P
+#    ${CMAKE_CURRENT_BINARY_DIR}/cmake/Uninstall.cmake)
 
 # ---[ Configuration summary
 caffe_print_configuration_summary()

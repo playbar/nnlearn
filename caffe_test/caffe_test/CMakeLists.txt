@@ -30,24 +30,13 @@ ADD_DEFINITIONS(-DUSE_OPENCV)
 ADD_DEFINITIONS(-DCAFFE_BUILDING_STATIC_LIB)
 
 MESSAGE(STATUS "cmake current source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
-SET(PATH_TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/./../../demo/Caffe_Test)
-SET(PATH_SRC_GFLAGS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/./../../src/gflags)
-SET(PATH_SRC_GLOG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/./../../src/glog)
-SET(PATH_SRC_HDF5_FILES ${CMAKE_CURRENT_SOURCE_DIR}/./../../src/hdf5)
-SET(PATH_SRC_LEVELDB_FILES ${CMAKE_CURRENT_SOURCE_DIR}/./../../src/leveldb)
-SET(PATH_SRC_LMDB_FILES ${CMAKE_CURRENT_SOURCE_DIR}/./../../src/lmdb)
-SET(PATH_SRC_PROTOBUF_FILES ${CMAKE_CURRENT_SOURCE_DIR}/./../../src/protobuf)
-SET(PATH_SRC_SNAPPY_FILES ${CMAKE_CURRENT_SOURCE_DIR}/./../../src/snappy)
-SET(PATH_SRC_OPENBLAS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/./../../src/openblas)
-SET(PATH_SRC_CAFFE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/./../../src/caffe)
+SET(PATH_TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR})
+SET(PATH_SRC_HDF5_FILES 	${CMAKE_CURRENT_SOURCE_DIR}/../hdf5)
+SET(PATH_SRC_LEVELDB_FILES 	${CMAKE_CURRENT_SOURCE_DIR}/../leveldb)
+SET(PATH_SRC_LMDB_FILES 	${CMAKE_CURRENT_SOURCE_DIR}/../lmdb)
+SET(PATH_SRC_PROTOBUF_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf)
+SET(PATH_SRC_CAFFE_FILES    ${CMAKE_CURRENT_SOURCE_DIR}/../caffe)
 MESSAGE(STATUS "path test files: ${PATH_TEST_FILES}")
-
-SET(PATH_OPENCV /opt/opencv3.4.2)
-IF(EXISTS ${PATH_OPENCV})
-	MESSAGE(STATUS "Found OpenCV: ${PATH_OPENCV}")
-ELSE()
-	MESSAGE(FATAL_ERROR "Can not find OpenCV in ${PATH_OPENCV}")
-ENDIF()
 
 # head file search path
 INCLUDE_DIRECTORIES(
@@ -70,14 +59,15 @@ INCLUDE_DIRECTORIES(
 	${PROJECT_SOURCE_DIR}/opencv/modules/videoio/include
 	${PROJECT_SOURCE_DIR}/opencv/modules/video/include
 	${PROJECT_SOURCE_DIR}/opencv/modules/videostab/include
-	${PATH_SRC_GFLAGS_FILES}/build/include
-	${PATH_SRC_GLOG_FILES}/build
+	${PROJECT_SOURCE_DIR}/boost
+	${PROJECT_SOURCE_DIR}/openblas
+	${PROJECT_SOURCE_DIR}/gflags
+	${PROJECT_SOURCE_DIR}/glog/src
+	${PROJECT_SOURCE_DIR}/snappy
 	${PATH_SRC_HDF5_FILES}/src
 	${PATH_SRC_LEVELDB_FILES}/include
 	#${PATH_SRC_LMDB_FILES} # if include this directory, will have many boost errors, so make system lmdb.h file 
 	${PATH_SRC_PROTOBUF_FILES}/src
-	${PATH_SRC_SNAPPY_FILES}
-	${PATH_SRC_OPENBLAS_FILES}
 	${PATH_SRC_CAFFE_FILES}/include
 	${PATH_SRC_CAFFE_FILES}/include/caffe/proto
 )
@@ -122,30 +112,32 @@ IF(BUILD_GPU)
 	)
 ENDIF()
 
-IF(BUILD_GPU)
-	FIND_PACKAGE(CUDA)
-	INCLUDE_DIRECTORIES(/usr/local/cuda-8.0/include)
-	LIST(APPEND CUDA_NVCC_FLAGS -std=c++11;-O2)
-	LIST(APPEND CUDA_NVCC_FLAGS -Xcompiler;-fPIC)
-	LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_50,code=sm_50)
-	LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_60,code=sm_60)
-	SET(CUDA_PROPAGATE_HOST_FLAGS OFF)
+#IF(BUILD_GPU)
+#	FIND_PACKAGE(CUDA)
+#	INCLUDE_DIRECTORIES(/usr/local/cuda-8.0/include)
+#	LIST(APPEND CUDA_NVCC_FLAGS -std=c++11;-O2)
+#	LIST(APPEND CUDA_NVCC_FLAGS -Xcompiler;-fPIC)
+#	LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_50,code=sm_50)
+#	LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_60,code=sm_60)
+#	SET(CUDA_PROPAGATE_HOST_FLAGS OFF)
+#
+#	CUDA_ADD_LIBRARY(caffe SHARED ${CAFFE_SRC_LIST})
+#ELSE()
+#	ADD_LIBRARY(caffe SHARED ${CAFFE_SRC_LIST})
+#ENDIF()
 
-	CUDA_ADD_LIBRARY(caffe SHARED ${CAFFE_SRC_LIST})
-ELSE()
-	ADD_LIBRARY(caffe SHARED ${CAFFE_SRC_LIST})
-ENDIF()
-
-# find opencv library
-FIND_LIBRARY(opencv_core NAMES opencv_core PATHS ${PATH_OPENCV}/lib NO_DEFAULT_PATH)
-FIND_LIBRARY(opencv_imgproc NAMES opencv_imgproc PATHS ${PATH_OPENCV}/lib NO_DEFAULT_PATH)
-FIND_LIBRARY(opencv_highgui NAMES opencv_highgui PATHS ${PATH_OPENCV}/lib NO_DEFAULT_PATH)
-FIND_LIBRARY(opencv_imgcodecs NAMES opencv_imgcodecs PATHS ${PATH_OPENCV}/lib NO_DEFAULT_PATH)
-FIND_LIBRARY(opencv_video NAMES opencv_video PATHS ${PATH_OPENCV}/lib NO_DEFAULT_PATH)
-FIND_LIBRARY(opencv_videoio NAMES opencv_videoio PATHS ${PATH_OPENCV}/lib NO_DEFAULT_PATH)
-FIND_LIBRARY(opencv_objdetect NAMES opencv_objdetect PATHS ${PATH_OPENCV}/lib NO_DEFAULT_PATH)
-FIND_LIBRARY(opencv_ml NAMES opencv_ml PATHS ${PATH_OPENCV}/lib NO_DEFAULT_PATH)
-MESSAGE(STATUS "opencv libraries: ${opencv_core} ${opencv_imgproc} ${opencv_highgui} ${opencv_imgcodecs} ${opencv_video}" ${opencv_videoio} ${opencv_objdetect} ${opencv_ml})
+link_libraries(opencv_core)
+link_libraries(opencv_imgproc)
+link_libraries(opencv_imgcodecs)
+link_libraries(opencv_highgui)
+link_libraries(opencv_video)
+link_libraries(opencv_videoio)
+link_libraries(opencv_objdetect)
+link_libraries(opencv_ml)
+link_libraries(hdf5-static)
+link_libraries(hdf5_cpp-static)
+link_libraries(hdf5_hl-static)
+link_libraries(hdf5_hl_cpp-static)
 
 # find dep library
 SET(DEP_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build CACHE PATH "dep library path")
@@ -169,46 +161,23 @@ FILE(GLOB_RECURSE TEST_CPP_LIST ${PATH_TEST_FILES}/*.cpp)
 FILE(GLOB_RECURSE TEST_CC_LIST ${PATH_TEST_FILES}/*.cc)
 #MESSAGE(STATUS "test cpp list: ${TEST_CPP_LIST} ${TEST_C_LIST}")
 
-SET(DEP_LIBS )
-LIST(APPEND DEP_LIBS
+ADD_EXECUTABLE(caffe_test ${TEST_CPP_LIST} ${TEST_CC_LIST})
+
+TARGET_LINK_LIBRARIES(caffe_test
 	caffe
-	${DEP_LIB_DIR}/libgflags.a
-	${DEP_LIB_DIR}/libglog.a
-	${DEP_LIB_DIR}/libhdf5-static.a
-	${DEP_LIB_DIR}/libhdf5_cpp-static.a
-	${DEP_LIB_DIR}/libhdf5_hl-static.a
-	${DEP_LIB_DIR}/libhdf5_hl_cpp-static.a	
-	${DEP_LIB_DIR}/libhdf5-static.a
-	${DEP_LIB_DIR}/libleveldb.a
-	${DEP_LIB_DIR}/liblmdb.a
-	${DEP_LIB_DIR}/libprotobuf.a
-	${DEP_LIB_DIR}/libprotoc.a
-	${DEP_LIB_DIR}/libsnappy.a
-	${opencv_ml}
-	${opencv_core}
-	${opencv_imgproc}
-	${opencv_highgui}
-	${opencv_imgcodecs}
-	${opencv_video}
-	${opencv_videoio}
-	${opencv_objdetect}
-	boost_system
-	boost_thread
-	boost_filesystem	
-	openblas
+	gflags
+	glog
+	lmdb
+	leveldb
+	libprotobuf_caff
+	libprotoc_caff
+	snappy
+	boost_all
 	dl # hdf5: undefined reference to dlopen
 	pthread
 )
 
-IF(BUILD_GPU)
-	LIST(APPEND DEP_LIBS
-		cublas
-		curand
-	)
-ENDIF()
 
 # build executable program
-ADD_EXECUTABLE(Caffe_Test ${TEST_CPP_LIST} ${TEST_CC_LIST})
 # add dependent library: static and dynamic
-TARGET_LINK_LIBRARIES(Caffe_Test ${DEP_LIBS})
 
