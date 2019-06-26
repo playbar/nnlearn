@@ -1,7 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 
-add_definitions(-DBOOST_THREAD_POSIX)
-add_definitions(-DBOOST_THREAD_USES_GETPAGESIZE)
+
+add_definitions(-DBOOST_HAS_THREADS)
+#add_definitions(-DBOOST_THREAD_USES_GETPAGESIZE)
 
 # support C++11
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
@@ -18,6 +19,7 @@ ELSE()
 	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -O2")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -O2")
 ENDIF()
+
 MESSAGE(STATUS "cmake build type: ${CMAKE_BUILD_TYPE}")
 
 MESSAGE(STATUS "cmake current source dir: ${CMAKE_CURRENT_SOURCE_DIR}")

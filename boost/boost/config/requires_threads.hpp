@@ -29,7 +29,7 @@
 #  error "Threading support unavaliable: it has been explicitly disabled with BOOST_DISABLE_THREADS"
 
 #elif !defined(BOOST_HAS_THREADS)
-
+oo
 # if defined __COMO__
 //  Comeau C++
 #   error "Compiler threading support is not turned on. Please set the correct command line options for threading: -D_MT (Windows) or -D_REENTRANT (Unix)"

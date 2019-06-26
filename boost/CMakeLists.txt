@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.4.1)
 
+project(boost LANGUAGES C CXX)
 #boost_1_70_0
 
 #set(CMAKE_BUILD_TYPE "Release")
