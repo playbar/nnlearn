@@ -690,7 +690,7 @@ int omp_get_num_procs(void) __attribute__ ((weak));
 #endif
 
 static __inline void blas_unlock(volatile BLASULONG *address){
-  MB;
+//  MB;
   *address = 0;
 }
 

@@ -29,7 +29,6 @@ SET(PATH_SRC_LEVELDB_FILES 	${CMAKE_CURRENT_SOURCE_DIR}/../leveldb)
 SET(PATH_SRC_LMDB_FILES 	${CMAKE_CURRENT_SOURCE_DIR}/../lmdb)
 SET(PATH_SRC_PROTOBUF_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf)
 SET(PATH_SRC_SNAPPY_FILES 	${CMAKE_CURRENT_SOURCE_DIR}/../snappy)
-SET(PATH_SRC_OPENBLAS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../openblas)
 MESSAGE(STATUS "path test files: ${PATH_TEST_FILES}")
 
 
@@ -55,6 +54,7 @@ INCLUDE_DIRECTORIES(
 	${PROJECT_SOURCE_DIR}/opencv/modules/video/include
 	${PROJECT_SOURCE_DIR}/opencv/modules/videostab/include
 	${PROJECT_SOURCE_DIR}/boost
+	${PROJECT_SOURCE_DIR}/openblas
 	${PATH_SRC_GFLAGS_FILES}/include
 	${PATH_SRC_GLOG_FILES}/src
 	${PATH_SRC_HDF5_FILES}
@@ -63,7 +63,6 @@ INCLUDE_DIRECTORIES(
 	${PATH_SRC_LMDB_FILES} # if include this directory, will have many boost errors, so make system lmdb.h file
 	${PATH_SRC_PROTOBUF_FILES}/src
 	${PATH_SRC_SNAPPY_FILES}
-	${PATH_SRC_OPENBLAS_FILES}
 )
 
 link_libraries(opencv_core)
@@ -74,7 +73,6 @@ link_libraries(opencv_video)
 link_libraries(opencv_videoio)
 link_libraries(opencv_objdetect)
 link_libraries(opencv_ml)
-link_libraries(glog)
 link_libraries(hdf5-static)
 link_libraries(hdf5_cpp-static)
 link_libraries(hdf5_hl-static)
@@ -103,6 +101,7 @@ ADD_EXECUTABLE(caffe_3rd_test ${TEST_CPP_LIST} ${TEST_CC_LIST})
 # add dependent library: static and dynamic
 TARGET_LINK_LIBRARIES(caffe_3rd_test
 	gflags
+	glog
 	lmdb
 	leveldb
 	libprotobuf_caff
