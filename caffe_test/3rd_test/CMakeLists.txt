@@ -55,8 +55,8 @@ INCLUDE_DIRECTORIES(
 	${PROJECT_SOURCE_DIR}/opencv/modules/videostab/include
 	${PROJECT_SOURCE_DIR}/boost
 	${PROJECT_SOURCE_DIR}/openblas
-	${PATH_SRC_GFLAGS_FILES}/include
-	${PATH_SRC_GLOG_FILES}/src
+	${PROJECT_SOURCE_DIR}/gflags
+	${PROJECT_SOURCE_DIR}/glog/src
 	${PATH_SRC_HDF5_FILES}
 	${PATH_SRC_HDF5_FILES}/src
 	${PATH_SRC_LEVELDB_FILES}/include
@@ -77,6 +77,7 @@ link_libraries(hdf5-static)
 link_libraries(hdf5_cpp-static)
 link_libraries(hdf5_hl-static)
 link_libraries(hdf5_hl_cpp-static)
+#link_libraries(openblas)
 
 # find dep library
 SET(DEP_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build CACHE PATH "dep library path")
@@ -108,7 +109,6 @@ TARGET_LINK_LIBRARIES(caffe_3rd_test
 	libprotoc_caff
 	snappy
 	boost_all
-	openblas
 	dl # hdf5: undefined reference to dlopen
 	pthread
 )

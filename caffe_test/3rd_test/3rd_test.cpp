@@ -12,10 +12,12 @@
 int main()
 {
 	// Blog: http://blog.csdn.net/fengbingchun/article/details/48768039
-	int ret = test_openblas_1();
+	int ret = test_boost_shared_ptr();
 
-	if (ret == 0) fprintf(stdout, "====== test success ======\n");
-	else fprintf(stderr, "###### test fail ######\n");
+	if (ret == 0)
+		fprintf(stdout, "====== test success ======\n");
+	else
+		fprintf(stderr, "###### test fail ######\n");
 
 	return 0;
 }

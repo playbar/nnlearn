@@ -8,6 +8,8 @@ set(CMAKE_CXX_STANDARD 14)
 message(${CMAKE_CXX_COMPILER_ID})
 
 add_subdirectory(openblas)
+add_subdirectory(glog)
+add_subdirectory(gflags)
 add_subdirectory(boost)
 add_subdirectory(opencv)
 add_subdirectory(caffe_test)

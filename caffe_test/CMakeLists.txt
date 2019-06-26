@@ -1,5 +1,3 @@
-add_subdirectory(glog)
-add_subdirectory(gflags)
 add_subdirectory(hdf5)
 add_subdirectory(leveldb)
 add_subdirectory(lmdb)
