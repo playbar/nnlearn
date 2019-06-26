@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 3.6)
 project(nnlearn LANGUAGES CXX C ASM)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fpermissive -fvisibility=hidden -Wall -std=c++17" )
-
-set(CMAKE_CXX_STANDARD 14)
+#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fpermissive -fvisibility=hidden -Wall -std=c++17" )
+#set(CMAKE_CXX_STANDARD 14)
 
 message(${CMAKE_CXX_COMPILER_ID})
 
 add_subdirectory(openblas)
 add_subdirectory(glog)
 add_subdirectory(gflags)
+add_subdirectory(snappy)
 add_subdirectory(boost)
 add_subdirectory(opencv)
 add_subdirectory(caffe_test)

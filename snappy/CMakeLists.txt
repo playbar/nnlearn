@@ -49,7 +49,7 @@ endif(GFLAGS_FOUND)
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/cmake/config.h.in"
-  "${PROJECT_BINARY_DIR}/config.h"
+  "${PROJECT_SOURCE_DIR}/config.h"
 )
 
 # We don't want to define HAVE_ macros in public headers. Instead, we use
@@ -70,7 +70,7 @@ endif(NOT HAVE_SYS_UIO_H_01)
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/snappy-stubs-public.h.in"
-  "${PROJECT_BINARY_DIR}/snappy-stubs-public.h")
+  "${PROJECT_SOURCE_DIR}/snappy-stubs-public.h")
 
 add_library(snappy "")
 target_sources(snappy

@@ -18,18 +18,18 @@ int test_gflags_1()
 	tmp_argv[1] = "--big_menu=false";
 	tmp_argv[2] = "--languages=chinese";
 
-//	//google::ParseCommandLineFlags(&argc, &argv, true);
-//	google::ParseCommandLineFlags(&tmp_argc, &tmp_argv, true);
-//
-//	std::cout << "argc=" << tmp_argc << std::endl;
-//	if (FLAGS_big_menu) {
-//		std::cout << "big menu is ture" << std::endl;
-//	}
-//	else {
-//		std::cout << "big menu is flase" << std::endl;
-//	}
-//
-//	std::cout << "languages=" << FLAGS_languages << std::endl;
+	//google::ParseCommandLineFlags(&argc, &argv, true);
+    gflags::ParseCommandLineFlags(&tmp_argc, &tmp_argv, true);
+
+	std::cout << "argc=" << tmp_argc << std::endl;
+	if (FLAGS_big_menu) {
+		std::cout << "big menu is ture" << std::endl;
+	}
+	else {
+		std::cout << "big menu is flase" << std::endl;
+	}
+
+	std::cout << "languages=" << FLAGS_languages << std::endl;
 
 	return 0;
 }
