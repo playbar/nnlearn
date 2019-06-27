@@ -61,56 +61,56 @@ INCLUDE_DIRECTORIES(
 	${PROJECT_SOURCE_DIR}/opencv/modules/videostab/include
 	${PROJECT_SOURCE_DIR}/boost
 	${PROJECT_SOURCE_DIR}/openblas
-	${PROJECT_SOURCE_DIR}/gflags
+	${PROJECT_SOURCE_DIR}/gflags/src
 	${PROJECT_SOURCE_DIR}/glog/src
 	${PROJECT_SOURCE_DIR}/snappy
 	${PATH_SRC_HDF5_FILES}/src
 	${PATH_SRC_LEVELDB_FILES}/include
-	#${PATH_SRC_LMDB_FILES} # if include this directory, will have many boost errors, so make system lmdb.h file 
+	${PATH_SRC_LMDB_FILES} # if include this directory, will have many boost errors, so make system lmdb.h file
 	${PATH_SRC_PROTOBUF_FILES}/src
 	${PATH_SRC_CAFFE_FILES}/include
-	${PATH_SRC_CAFFE_FILES}/include/caffe/proto
+	${PATH_SRC_CAFFE_FILES}/src
 )
+#
+## build caffe
+#SET(CAFFE_SRC_LIST )
+#LIST(APPEND CAFFE_SRC_LIST
+#	${PATH_SRC_CAFFE_FILES}/src/caffe/blob.cpp
+#	${PATH_SRC_CAFFE_FILES}/src/caffe/common.cpp
+#	${PATH_SRC_CAFFE_FILES}/src/caffe/data_transformer.cpp
+#	${PATH_SRC_CAFFE_FILES}/src/caffe/internal_thread.cpp
+#	${PATH_SRC_CAFFE_FILES}/src/caffe/layer.cpp
+#	${PATH_SRC_CAFFE_FILES}/src/caffe/layer_factory.cpp
+#	${PATH_SRC_CAFFE_FILES}/src/caffe/net.cpp
+#	${PATH_SRC_CAFFE_FILES}/src/caffe/parallel.cpp
+#	${PATH_SRC_CAFFE_FILES}/src/caffe/solver.cpp
+#	${PATH_SRC_CAFFE_FILES}/src/caffe/solver_factory.cpp
+#	${PATH_SRC_CAFFE_FILES}/src/caffe/syncedmem.cpp
+#)
+#
+#FILE(GLOB_RECURSE SRC_CAFFE_LIST_CPU_LAYERS ${PATH_SRC_CAFFE_FILES}/src/caffe/layers/*.cpp)
+#FILE(GLOB_RECURSE SRC_CAFFE_LIST_CPU_PROTO ${PATH_SRC_CAFFE_FILES}/src/caffe/proto/*.cc)
+#FILE(GLOB_RECURSE SRC_CAFFE_LIST_CPU_SOLVERS ${PATH_SRC_CAFFE_FILES}/src/caffe/solvers/*.cpp)
+#FILE(GLOB_RECURSE SRC_CAFFE_LIST_CPU_UTIL ${PATH_SRC_CAFFE_FILES}/src/caffe/util/*.cpp)
+#
+#FILE(GLOB_RECURSE SRC_CAFFE_LIST_GPU_LAYERS ${PATH_SRC_CAFFE_FILES}/src/caffe/layers/*.cu)
+#FILE(GLOB_RECURSE SRC_CAFFE_LIST_GPU_SOLVERS ${PATH_SRC_CAFFE_FILES}/src/caffe/solvers/*.cu)
+#FILE(GLOB_RECURSE SRC_CAFFE_LIST_GPU_UTIL ${PATH_SRC_CAFFE_FILES}/src/caffe/util/*.cu)
 
-# build caffe
-SET(CAFFE_SRC_LIST )
-LIST(APPEND CAFFE_SRC_LIST
-	${PATH_SRC_CAFFE_FILES}/src/caffe/blob.cpp
-	${PATH_SRC_CAFFE_FILES}/src/caffe/common.cpp
-	${PATH_SRC_CAFFE_FILES}/src/caffe/data_transformer.cpp
-	${PATH_SRC_CAFFE_FILES}/src/caffe/internal_thread.cpp
-	${PATH_SRC_CAFFE_FILES}/src/caffe/layer.cpp
-	${PATH_SRC_CAFFE_FILES}/src/caffe/layer_factory.cpp
-	${PATH_SRC_CAFFE_FILES}/src/caffe/net.cpp
-	${PATH_SRC_CAFFE_FILES}/src/caffe/parallel.cpp
-	${PATH_SRC_CAFFE_FILES}/src/caffe/solver.cpp
-	${PATH_SRC_CAFFE_FILES}/src/caffe/solver_factory.cpp
-	${PATH_SRC_CAFFE_FILES}/src/caffe/syncedmem.cpp
-)
+#LIST(APPEND CAFFE_SRC_LIST
+#	${SRC_CAFFE_LIST_CPU_LAYERS}
+#	${SRC_CAFFE_LIST_CPU_PROTO}
+#	${SRC_CAFFE_LIST_CPU_SOLVERS}
+#	${SRC_CAFFE_LIST_CPU_UTIL}
+#)
 
-FILE(GLOB_RECURSE SRC_CAFFE_LIST_CPU_LAYERS ${PATH_SRC_CAFFE_FILES}/src/caffe/layers/*.cpp)
-FILE(GLOB_RECURSE SRC_CAFFE_LIST_CPU_PROTO ${PATH_SRC_CAFFE_FILES}/src/caffe/proto/*.cc)
-FILE(GLOB_RECURSE SRC_CAFFE_LIST_CPU_SOLVERS ${PATH_SRC_CAFFE_FILES}/src/caffe/solvers/*.cpp)
-FILE(GLOB_RECURSE SRC_CAFFE_LIST_CPU_UTIL ${PATH_SRC_CAFFE_FILES}/src/caffe/util/*.cpp)
-
-FILE(GLOB_RECURSE SRC_CAFFE_LIST_GPU_LAYERS ${PATH_SRC_CAFFE_FILES}/src/caffe/layers/*.cu)
-FILE(GLOB_RECURSE SRC_CAFFE_LIST_GPU_SOLVERS ${PATH_SRC_CAFFE_FILES}/src/caffe/solvers/*.cu)
-FILE(GLOB_RECURSE SRC_CAFFE_LIST_GPU_UTIL ${PATH_SRC_CAFFE_FILES}/src/caffe/util/*.cu)
-
-LIST(APPEND CAFFE_SRC_LIST
-	${SRC_CAFFE_LIST_CPU_LAYERS}
-	${SRC_CAFFE_LIST_CPU_PROTO}
-	${SRC_CAFFE_LIST_CPU_SOLVERS}
-	${SRC_CAFFE_LIST_CPU_UTIL}
-)
-
-IF(BUILD_GPU)
-	LIST(APPEND CAFFE_SRC_LIST
-		${SRC_CAFFE_LIST_GPU_LAYERS}
-		${SRC_CAFFE_LIST_GPU_SOLVERS}
-		${SRC_CAFFE_LIST_GPU_UTIL}
-	)
-ENDIF()
+#IF(BUILD_GPU)
+#	LIST(APPEND CAFFE_SRC_LIST
+#		${SRC_CAFFE_LIST_GPU_LAYERS}
+#		${SRC_CAFFE_LIST_GPU_SOLVERS}
+#		${SRC_CAFFE_LIST_GPU_UTIL}
+#	)
+#ENDIF()
 
 #IF(BUILD_GPU)
 #	FIND_PACKAGE(CUDA)

@@ -54,7 +54,7 @@ INCLUDE_DIRECTORIES(
 	${PROJECT_SOURCE_DIR}/opencv/modules/videostab/include
 	${PROJECT_SOURCE_DIR}/boost
 	${PROJECT_SOURCE_DIR}/openblas
-	${PROJECT_SOURCE_DIR}/gflags
+	${PROJECT_SOURCE_DIR}/gflags/src
 	${PROJECT_SOURCE_DIR}/glog/src
 	${PROJECT_SOURCE_DIR}/snappy
 	${PATH_SRC_HDF5_FILES}

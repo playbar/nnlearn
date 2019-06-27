@@ -992,7 +992,7 @@ int test_caffe_util_io()
 	std::string temp_filename{ " " };
 	caffe::MakeTempFilename(&temp_filename);
 	fprintf(stderr, "temp file name: %s\n", temp_filename.c_str());
-	caffe::RemoveCaffeTempDir();
+//	caffe::RemoveCaffeTempDir();
 
 	return 0;
 }

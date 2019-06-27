@@ -358,7 +358,7 @@ static void convert_dataset(const char* image_filename, const char* label_filena
 #ifdef __linux__
 		int ret = snprintf(key_cstr, kMaxKeyLength, "%08d", item_id);
 #else
-		int ret = _snprintf(key_cstr, kMaxKeyLength, "%08d", item_id);
+		int ret = snprintf(key_cstr, kMaxKeyLength, "%08d", item_id);
 #endif
 		if (ret == kMaxKeyLength || ret < 0) {
 			printf("warning ");

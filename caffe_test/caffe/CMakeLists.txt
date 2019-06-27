@@ -13,18 +13,43 @@ project(Caffe C CXX)
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-INCLUDE_DIRECTORIES(
-        ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf/src
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../boost
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../gflags
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../glog/src
-)
-
 # ---[ Caffe version
 set(CAFFE_TARGET_VERSION "1.0.0" CACHE STRING "Caffe logical version")
 set(CAFFE_TARGET_SOVERSION "1.0.0" CACHE STRING "Caffe soname version")
 add_definitions(-DCAFFE_VERSION=${CAFFE_TARGET_VERSION})
 add_definitions(-DCPU_ONLY)
+add_definitions(-DUSE_HDF5)
+add_definitions(-DUSE_OPENCV)
+
+INCLUDE_DIRECTORIES(
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/../hdf5
+        ${CMAKE_CURRENT_SOURCE_DIR}/../hdf5/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/../hdf5/hl/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../boost
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../gflags/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../glog/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../openblas
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/calib3d/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/core/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/dnn/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/features2d/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/flann/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/highgui/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/imgcodecs/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/imgproc/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/ml/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/objdetect/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/photo/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/shape/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/stitching/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/superres/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/videoio/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/video/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../opencv/modules/videostab/include
+)
 
 # ---[ Using cmake scripts and modules
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules)
