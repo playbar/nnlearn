@@ -40,15 +40,10 @@ int lenet_5_mnist_test()
 	caffe::Caffe::set_mode(caffe::Caffe::GPU);
 #endif
 
-#ifdef _MSC_VER
-	const std::string param_file{ "E:/GitCode/Caffe_Test/test_data/Net/lenet-5_mnist_windows_test.prototxt" };
-	const std::string trained_filename{ "E:/GitCode/Caffe_Test/test_data/Net/lenet-5_mnist_iter_10000.caffemodel" };
-	const std::string image_path{ "E:/GitCode/Caffe_Test/test_data/images/handwritten_digits/" };
-#else
-	const std::string param_file{ "test_data/Net/lenet-5_mnist_linux_test.prototxt" };
-	const std::string trained_filename{ "test_data/Net/lenet-5_mnist_iter_10000.caffemodel" };
-	const std::string image_path{ "test_data/images/handwritten_digits/" };
-#endif
+	const std::string param_file = "test_data/Net/lenet-5_mnist_linux_test.prototxt";
+	const std::string trained_filename = "test_data/Net/lenet-5_mnist_iter_10000.caffemodel";
+	const std::string image_path = "test_data/images/handwritten_digits/";
+
 
 	caffe::Net<float> caffe_net(param_file, caffe::TEST);
 	caffe_net.CopyTrainedLayersFrom(trained_filename);

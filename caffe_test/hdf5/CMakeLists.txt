@@ -409,34 +409,34 @@ include (${HDF_RESOURCES_EXT_DIR}/HDFMacros.cmake)
 include (${HDF_RESOURCES_EXT_DIR}/HDFLibMacros.cmake)
 include (${HDF_RESOURCES_DIR}/HDF5Macros.cmake)
 
-#-----------------------------------------------------------------------------
-# Setup output Directories
-#-----------------------------------------------------------------------------
-if (NOT HDF5_EXTERNALLY_CONFIGURED)
-  set (CMAKE_RUNTIME_OUTPUT_DIRECTORY
-      ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single Directory for all Executables."
-  )
-  set (CMAKE_LIBRARY_OUTPUT_DIRECTORY
-      ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single Directory for all Libraries"
-  )
-  set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
-      ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single Directory for all static libraries."
-  )
-  set (CMAKE_Fortran_MODULE_DIRECTORY
-      ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single Directory for all fortran modules."
-  )
-  if (WIN32)
-    set (CMAKE_TEST_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE})
-  else (WIN32)
-    set (CMAKE_TEST_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-  endif (WIN32)
-else (NOT HDF5_EXTERNALLY_CONFIGURED)
-  # if we are externally configured, but the project uses old cmake scripts
-  # this may not be set and utilities like H5detect will fail
-  if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
-    set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
-  endif (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
-endif (NOT HDF5_EXTERNALLY_CONFIGURED)
+##-----------------------------------------------------------------------------
+## Setup output Directories
+##-----------------------------------------------------------------------------
+#if (NOT HDF5_EXTERNALLY_CONFIGURED)
+#  set (CMAKE_RUNTIME_OUTPUT_DIRECTORY
+#      ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single Directory for all Executables."
+#  )
+#  set (CMAKE_LIBRARY_OUTPUT_DIRECTORY
+#      ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single Directory for all Libraries"
+#  )
+##  set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+##      ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single Directory for all static libraries."
+##  )
+#  set (CMAKE_Fortran_MODULE_DIRECTORY
+#      ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single Directory for all fortran modules."
+#  )
+#  if (WIN32)
+#    set (CMAKE_TEST_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE})
+#  else (WIN32)
+#    set (CMAKE_TEST_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+#  endif (WIN32)
+#else (NOT HDF5_EXTERNALLY_CONFIGURED)
+#  # if we are externally configured, but the project uses old cmake scripts
+#  # this may not be set and utilities like H5detect will fail
+#  if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+#    set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
+#  endif (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+#endif (NOT HDF5_EXTERNALLY_CONFIGURED)
 
 #-----------------------------------------------------------------------------
 # Targets built within this project are exported at Install time for use
