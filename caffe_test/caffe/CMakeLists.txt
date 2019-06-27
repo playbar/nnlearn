@@ -22,6 +22,7 @@ add_definitions(-DUSE_HDF5)
 add_definitions(-DUSE_OPENCV)
 
 INCLUDE_DIRECTORIES(
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf/src
         ${CMAKE_CURRENT_SOURCE_DIR}/../hdf5
@@ -67,7 +68,7 @@ include(cmake/ConfigGen.cmake)
 caffe_option(CPU_ONLY  "Build Caffe without CUDA support" OFF) # TODO: rename to USE_CUDA
 caffe_option(USE_CUDNN "Build Caffe with cuDNN library support" ON IF NOT CPU_ONLY)
 caffe_option(USE_NCCL "Build Caffe with NCCL library support" OFF)
-caffe_option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+caffe_option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 caffe_option(BUILD_python "Build Python wrapper" OFF)
 set(python_version "2" CACHE STRING "Specify which Python version to use")
 caffe_option(BUILD_matlab "Build Matlab wrapper" OFF IF UNIX OR APPLE)
