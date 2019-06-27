@@ -36,12 +36,8 @@ function(caffe_detect_installed_gpus out_variable)
                     ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
 
     if(__nvcc_res EQUAL 0)
-      # nvcc outputs text containing line breaks when building with MSVC.
-      # The line below prevents CMake from inserting a variable with line
-      # breaks in the cache
-      string(REGEX MATCH "([1-9].[0-9])" __nvcc_out "${__nvcc_out}")
       string(REPLACE "2.1" "2.1(2.0)" __nvcc_out "${__nvcc_out}")
-      set(CUDA_gpu_detect_output ${__nvcc_out} CACHE INTERNAL "Returned GPU architetures from caffe_detect_gpus tool" FORCE)      
+      set(CUDA_gpu_detect_output ${__nvcc_out} CACHE INTERNAL "Returned GPU architetures from caffe_detect_gpus tool" FORCE)
     endif()
   endif()
 
@@ -113,6 +109,12 @@ function(caffe_select_nvcc_arch_flags out_variable)
   set(__nvcc_flags "")
   set(__nvcc_archs_readable "")
 
+  string(COMPARE LESS "${CUDA_VERSION}" "9.0" iscudaolderthan90)
+  if(NOT iscudaolderthan90)
+    string(REPLACE "21(20)" "" __cuda_arch_bin "${__cuda_arch_bin}")
+    string(REPLACE "20" "" __cuda_arch_bin "${__cuda_arch_bin}")
+  endif()
+
   # Tell NVCC to add binaries for the specified GPUs
   foreach(__arch ${__cuda_arch_bin})
     if(__arch MATCHES "([0-9]+)\\(([0-9]+)\\)")
@@ -178,21 +180,11 @@ function(detect_cuDNN)
 
   find_path(CUDNN_INCLUDE cudnn.h
             PATHS ${CUDNN_ROOT} $ENV{CUDNN_ROOT} ${CUDA_TOOLKIT_INCLUDE}
-            PATH_SUFFIXES include
             DOC "Path to cuDNN include directory." )
-           
-  unset(_path_suffixes)
-  if(MSVC AND ${CMAKE_SIZEOF_VOID_P} EQUAL 8)
-    set(_path_suffixes PATH_SUFFIXES lib/x64)
-  else()
-    set(_path_suffixes PATH_SUFFIXES lib/Win32)    
-  endif()
 
   # dynamic libs have different suffix in mac and linux
   if(APPLE)
     set(CUDNN_LIB_NAME "libcudnn.dylib")
-  elseif(MSVC)
-    set(CUDNN_LIB_NAME "cudnn")
   else()
     set(CUDNN_LIB_NAME "libcudnn.so")
   endif()
@@ -200,7 +192,6 @@ function(detect_cuDNN)
   get_filename_component(__libpath_hist ${CUDA_CUDART_LIBRARY} PATH)
   find_library(CUDNN_LIBRARY NAMES ${CUDNN_LIB_NAME}
    PATHS ${CUDNN_ROOT} $ENV{CUDNN_ROOT} ${CUDNN_INCLUDE} ${__libpath_hist} ${__libpath_hist}/../lib
-   ${_path_suffixes}
    DOC "Path to cuDNN library.")
   
   if(CUDNN_INCLUDE AND CUDNN_LIBRARY)
@@ -247,7 +238,7 @@ endfunction()
 ################################################################################################
 
 find_package(CUDA 5.5 QUIET)
-find_cuda_helper_libs(curand)  # cmake 2.8.7 compartibility which doesn't search for curand
+find_cuda_helper_libs(curand)  # cmake 2.8.7 compatibility which doesn't search for curand
 
 if(NOT CUDA_FOUND)
   return()

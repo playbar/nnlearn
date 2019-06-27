@@ -212,7 +212,7 @@ endif ()
 if (INCLUDE_DIR MATCHES "^\\.\\.[/\\]")
   message (FATAL_ERROR "[GFLAGS_]INCLUDE_DIR must not start with parent directory reference (../)")
 endif ()
-set (GFLAGS_INCLUDE_DIR "${INCLUDE_DIR}")
+set (GFLAGS_INCLUDE_DIR "glags")
 
 # ----------------------------------------------------------------------------
 # system checks

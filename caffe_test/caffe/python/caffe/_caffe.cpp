@@ -1,3 +1,5 @@
+#include <Python.h>  // NOLINT(build/include_alpha)
+
 // Produce deprecation warnings (needs to come before arrayobject.h inclusion).
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 
@@ -37,41 +39,6 @@
   } \
 } while (0)
 
-#if defined(_MSC_VER) && (_MSC_FULL_VER >= 190024210)
-// Workaround for VS 2015 Update 3 which breaks boost python
-// See: http://stackoverflow.com/questions/38261530/unresolved-external-symbols-since-visual-studio-2015-update-3-boost-python-link
-// and https://msdn.microsoft.com/vs-knownissues/vs2015-update3
-#define BP_GET_POINTER(cls) \
-namespace boost { \
-template <> \
-const volatile caffe::cls * \
-get_pointer(const volatile caffe::cls *c) { \
-    return c; \
-} \
-}
-
-#define BP_GET_POINTER_T(cls, dtype) BP_GET_POINTER(cls<dtype>)
-
-// forward declare the NCCL class
-// in case we are not using NCCL
-namespace caffe {
-template <typename Dtype> class NCCL;
-}
-
-BP_GET_POINTER_T(Net, float);
-BP_GET_POINTER_T(Layer, float);
-BP_GET_POINTER_T(Solver, float);
-BP_GET_POINTER_T(SGDSolver, float);
-BP_GET_POINTER_T(NesterovSolver, float);
-BP_GET_POINTER_T(AdaGradSolver, float);
-BP_GET_POINTER_T(RMSPropSolver, float);
-BP_GET_POINTER_T(AdaDeltaSolver, float);
-BP_GET_POINTER_T(AdamSolver, float);
-BP_GET_POINTER_T(NCCL, float);
-BP_GET_POINTER(Timer);
-
-#endif
-
 namespace bp = boost::python;
 
 namespace caffe {
@@ -86,18 +53,15 @@ void set_mode_gpu() { Caffe::set_mode(Caffe::GPU); }
 
 void InitLog() {
   ::google::InitGoogleLogging("");
-#ifndef _MSC_VER
-  // this symbol is undefined on windows
   ::google::InstallFailureSignalHandler();
-#endif  // _MSC_VER
 }
 void InitLogLevel(int level) {
   FLAGS_minloglevel = level;
   InitLog();
 }
-void InitLogLevelPipe(int level, bool std_err) {
+void InitLogLevelPipe(int level, bool stderr) {
   FLAGS_minloglevel = level;
-  FLAGS_logtostderr = std_err;
+  FLAGS_logtostderr = stderr;
   InitLog();
 }
 void Log(const string& s) {
@@ -452,7 +416,7 @@ BOOST_PYTHON_MODULE(_caffe) {
     .def("reshape", &Net<Dtype>::Reshape)
     .def("clear_param_diffs", &Net<Dtype>::ClearParamDiffs)
     // The cast is to select a particular overload.
-    .def("copy_from", static_cast<void (Net<Dtype>::*)(const string)>(
+    .def("copy_from", static_cast<void (Net<Dtype>::*)(const string&)>(
         &Net<Dtype>::CopyTrainedLayersFrom))
     .def("share_with", &Net<Dtype>::ShareTrainedLayersWith)
     .add_property("_blob_loss_weights", bp::make_function(
@@ -500,6 +464,14 @@ BOOST_PYTHON_MODULE(_caffe) {
     .add_property("count",    static_cast<int (Blob<Dtype>::*)() const>(
         &Blob<Dtype>::count))
     .def("reshape",           bp::raw_function(&Blob_Reshape))
+#ifndef CPU_ONLY
+    .add_property("_gpu_data_ptr",
+        reinterpret_cast<uintptr_t (Blob<Dtype>::*)()>(
+          &Blob<Dtype>::mutable_gpu_data))
+    .add_property("_gpu_diff_ptr",
+        reinterpret_cast<uintptr_t (Blob<Dtype>::*)()>(
+          &Blob<Dtype>::mutable_gpu_diff))
+#endif
     .add_property("data",     bp::make_function(&Blob<Dtype>::mutable_cpu_data,
           NdarrayCallPolicies()))
     .add_property("diff",     bp::make_function(&Blob<Dtype>::mutable_cpu_diff,
@@ -518,7 +490,9 @@ BOOST_PYTHON_MODULE(_caffe) {
   bp::class_<SolverParameter>("SolverParameter", bp::no_init)
     .add_property("max_iter", &SolverParameter::max_iter)
     .add_property("display", &SolverParameter::display)
-    .add_property("layer_wise_reduce", &SolverParameter::layer_wise_reduce);
+    .add_property("layer_wise_reduce", &SolverParameter::layer_wise_reduce)
+    .add_property("base_lr", &SolverParameter::base_lr,
+           &SolverParameter::set_base_lr);
   bp::class_<LayerParameter>("LayerParameter", bp::no_init);
 
   bp::class_<Solver<Dtype>, shared_ptr<Solver<Dtype> >, boost::noncopyable>(
@@ -535,26 +509,28 @@ BOOST_PYTHON_MODULE(_caffe) {
     .def("restore", &Solver<Dtype>::Restore)
     .def("snapshot", &Solver<Dtype>::Snapshot)
     .def("share_weights", &share_weights)
+    .def("apply_update", &Solver<Dtype>::ApplyUpdate)
     .add_property("param", bp::make_function(&Solver<Dtype>::param,
-              bp::return_value_policy<bp::copy_const_reference>()));
+              bp::return_internal_reference<>()));
   BP_REGISTER_SHARED_PTR_TO_PYTHON(Solver<Dtype>);
 
   bp::class_<SGDSolver<Dtype>, bp::bases<Solver<Dtype> >,
     shared_ptr<SGDSolver<Dtype> >, boost::noncopyable>(
-        "SGDSolver", bp::init<string>());
-  bp::class_<NesterovSolver<Dtype>, bp::bases<Solver<Dtype> >,
+        "SGDSolver", bp::init<string>())
+        .add_property("lr", &SGDSolver<Dtype>::GetLearningRate);
+  bp::class_<NesterovSolver<Dtype>, bp::bases<SGDSolver<Dtype> >,
     shared_ptr<NesterovSolver<Dtype> >, boost::noncopyable>(
         "NesterovSolver", bp::init<string>());
-  bp::class_<AdaGradSolver<Dtype>, bp::bases<Solver<Dtype> >,
+  bp::class_<AdaGradSolver<Dtype>, bp::bases<SGDSolver<Dtype> >,
     shared_ptr<AdaGradSolver<Dtype> >, boost::noncopyable>(
         "AdaGradSolver", bp::init<string>());
-  bp::class_<RMSPropSolver<Dtype>, bp::bases<Solver<Dtype> >,
+  bp::class_<RMSPropSolver<Dtype>, bp::bases<SGDSolver<Dtype> >,
     shared_ptr<RMSPropSolver<Dtype> >, boost::noncopyable>(
         "RMSPropSolver", bp::init<string>());
-  bp::class_<AdaDeltaSolver<Dtype>, bp::bases<Solver<Dtype> >,
+  bp::class_<AdaDeltaSolver<Dtype>, bp::bases<SGDSolver<Dtype> >,
     shared_ptr<AdaDeltaSolver<Dtype> >, boost::noncopyable>(
         "AdaDeltaSolver", bp::init<string>());
-  bp::class_<AdamSolver<Dtype>, bp::bases<Solver<Dtype> >,
+  bp::class_<AdamSolver<Dtype>, bp::bases<SGDSolver<Dtype> >,
     shared_ptr<AdamSolver<Dtype> >, boost::noncopyable>(
         "AdamSolver", bp::init<string>());
 
