@@ -25,7 +25,8 @@ int test_openblas_1()
 	for (int j = 0; j<n*(n + 1) / 2; j++)
 		upperTriangleResult[j] = 0;
 
-	x[0] = 1; x[1] = 3;
+	x[0] = 1;
+    x[1] = 3;
 
 	cblas_dspr(CblasRowMajor, CblasUpper, n, 1, x, 1, upperTriangleResult);
 	double*& A = upperTriangleResult;

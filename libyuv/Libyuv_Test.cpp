@@ -11,7 +11,7 @@ void test_BGRAToNV12(const cv::Mat& matSrc, int width, int height, int size_fram
 int main(int argc, char* argv[])
 {
 	// Blog: http://blog.csdn.net/fengbingchun/article/details/50323273
-	cv::Mat matSrc = cv::imread("E:/GitCode/Libyuv_Test/test-images/cat.jpg");
+	cv::Mat matSrc = cv::imread("./cat.jpg");
 	if (!matSrc.data) {
 		std::cout << "read src image error" << std::endl;
 		return -1;
@@ -73,7 +73,7 @@ void test_BGRAToI420(const cv::Mat& matSrc, int width, int height, int size_fram
 	libyuv::I420ToBGRA(dst_y, dst_y_stride, dst_u, dst_u_stride, dst_v, dst_v_stride, matI420.data, width * 4, width, height);
 	cv::Mat matBGRA_ = cv::Mat(height, width, CV_8UC4, cv::Scalar::all(0));
 	libyuv::ARGBToBGRA(matI420.data, width * 4, matBGRA_.data, width * 4, width, height);
-	cv::imwrite("E:/GitCode/Libyuv_Test/test-images/I420_bgra.jpg", matBGRA_);
+	cv::imwrite("./I420_bgra.jpg", matBGRA_);
 	matBGRA_.copyTo(matDst);
 
 	int count_diff = 0;
@@ -123,7 +123,7 @@ void test_BGRAToNV12(const cv::Mat& matSrc, int width, int height, int size_fram
 	libyuv::ARGBToNV12(matBGRA.data, width * 4, dst_y, dst_y_stride, dst_vu, dst_vu_stride, width, height);
 	matNV12 = cv::Mat(height, width, CV_8UC4, cv::Scalar::all(0));
 	libyuv::NV12ToARGB(dst_y, dst_y_stride, dst_vu, dst_vu_stride, matNV12.data, width * 4, width, height);
-	cv::imwrite("E:/GitCode/Libyuv_Test/test-images/NV12_bgra.jpg", matNV12);
+	cv::imwrite("./NV12_bgra.jpg", matNV12);
 	matNV12.copyTo(matDst);
 
 	int count_diff = 0;
@@ -172,7 +172,7 @@ void test_BGRAToNV21(const cv::Mat& matSrc, int width, int height, int size_fram
 	libyuv::ARGBToNV21(matBGRA.data, width * 4, dst_y, dst_y_stride, dst_vu, dst_vu_stride, width, height);
 	matNV21 = cv::Mat(height, width, CV_8UC4, cv::Scalar::all(0));
 	libyuv::NV21ToARGB(dst_y, dst_y_stride, dst_vu, dst_vu_stride, matNV21.data, width * 4, width, height);
-	cv::imwrite("E:/GitCode/Libyuv_Test/test-images/NV21_bgra.jpg", matNV21);
+	cv::imwrite("./NV21_bgra.jpg", matNV21);
 	matNV21.copyTo(matDst);
 
 	int count_diff = 0;

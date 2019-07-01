@@ -3,10 +3,14 @@
 
 int main()
 {
-	int ret = lenet_5_mnist_test();
+	int ret = 0;
+//    ret = cifar10_convert();
+	ret = lenet_5_mnist_test();
 
-	if (0 == ret) fprintf(stdout, "========== test success ==========\n");
-	else fprintf(stderr, "########## test fail ##########\n");
+	if (0 == ret)
+        fprintf(stdout, "========== test success ==========\n");
+	else
+        fprintf(stderr, "########## test fail ##########\n");
 
 	return 0;
 }
