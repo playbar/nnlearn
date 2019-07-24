@@ -10,7 +10,7 @@
 
 using namespace cv;
 
-int feature_point_matching()
+int flann_point_matching()
 {
 //Mat img_1=imread("image0.jpg");
 //Mat img_2=imread("image1.jpg");
@@ -18,8 +18,8 @@ int feature_point_matching()
 //Mat img_1=imread("box.png");
 //Mat img_2=imread("box_in_scene.png");
 
-    Mat img_1=imread("lena.png");
-    Mat img_2=imread("lena_rotate.png");
+    Mat img_1=imread("m1.png");
+    Mat img_2=imread("test1.png");
 
     if( !img_1.data || !img_2.data )
     {
@@ -102,6 +102,54 @@ int feature_point_matching()
                 keypoints_2[good_matches[i].trainIdx].pt.x,keypoints_2[good_matches[i].trainIdx].pt.y,good_matches[i].trainIdx );
     }
     waitKey(0);
+    return 0;
+}
+
+
+int bfmatch_point_matching()
+{
+    Mat srcImage1 = imread("m1.png",IMREAD_GRAYSCALE);
+    Mat srcImage2 = imread("test1.png",IMREAD_GRAYSCALE);
+
+    //判断文件是否读取成功
+    if (srcImage1.empty() || srcImage2.empty())
+    {
+        std::cout << "图像加载失败!";
+        return -1;
+    }
+    else
+        std::cout << "图像加载成功..." << std::endl;
+
+    //检测两幅图像中的特征点
+    int minHessian = 2000;      //定义Hessian矩阵阈值
+
+    SurfFeatureDetector detector(minHessian);       //定义Surf检测器
+    vector<KeyPoint>keypoint1, keypoint2;           //定义两个KeyPoint类型矢量存储检测到的特征点
+    detector.detect(srcImage1, keypoint1);
+    detector.detect(srcImage2, keypoint2);
+
+    //计算特征向量的描述子
+    SurfDescriptorExtractor descriptorExtractor;
+    Mat descriptors1, descriptors2;
+
+    descriptorExtractor.compute(srcImage1, keypoint1, descriptors1);
+    descriptorExtractor.compute(srcImage2, keypoint2, descriptors2);
+
+    //使用BruteForceMatcher进行描述符匹配
+    BFMatcher matcher(NORM_L2);
+    vector<DMatch>matches;
+    matcher.match(descriptors1, descriptors2, matches);
+
+    //绘制匹配特征点
+    Mat matchImage;
+    drawMatches(srcImage1, keypoint1, srcImage2, keypoint2, matches, matchImage);
+
+    //显示匹配的图像
+    namedWindow("Match", WINDOW_AUTOSIZE);
+    imshow("Match", matchImage);
+
+    waitKey(0);
+
     return 0;
 }
 
