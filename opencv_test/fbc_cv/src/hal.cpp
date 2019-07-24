@@ -12,6 +12,7 @@
 #include <string.h>
 #include <float.h>
 #include <algorithm>
+#include <cmath>
 
 #include "core/fast_math.hpp"
 #include "core/interface.hpp"
