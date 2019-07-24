@@ -8,7 +8,8 @@
 
 int main()
 {
-	int ret = test_warpAffine_uchar();// run_all_test();
+//	int ret = run_all_test();
+	int ret = feature_point_matching();
 
 	if (ret == 0)
 		fprintf(stdout, "========== test success ==========\n");

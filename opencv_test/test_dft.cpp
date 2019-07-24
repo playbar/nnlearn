@@ -139,11 +139,13 @@ int test_dft_float()
 	cv::normalize(crop_, crop_, 0, 1, CV_MINMAX);
 
 	assert(m == m_ && n == n_ && padded.step == padded_.step);
-	for (int y = 0; y < m; y++) {
+	for (int y = 0; y < m; y++)
+	{
 		const fbc::uchar* p = padded.ptr(y);
 		const uchar* p_ = padded_.ptr(y);
 
-		for (int x = 0; x < padded.step; x++) {
+		for (int x = 0; x < padded.step; x++)
+		{
 			assert(p[x] == p_[x]);
 		}
 	}
