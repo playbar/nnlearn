@@ -1,14 +1,10 @@
-#include <assert.h>
 #include <iostream>
-#include <string>
-#include <fstream>
-
-#include "fbc_cv_funset.hpp"
-#include "opencv_funset.hpp"
+#include "funset.hpp"
 
 int main()
 {
-	int ret = test_warpAffine_uchar();// run_all_test();
+	VL_PRINT("Hello world!\n");
+	int ret = 0;
 
 	if (ret == 0)
 		fprintf(stdout, "========== test success ==========\n");
@@ -17,4 +13,3 @@ int main()
 
 	return 0;
 }
-

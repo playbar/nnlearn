@@ -1,1 +1,0 @@
-VIGRA_ADD_TEST(test_voxelneighborhood test.cxx LIBRARIES vigraimpex)
