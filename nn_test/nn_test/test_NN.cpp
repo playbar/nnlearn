@@ -5,10 +5,13 @@
 
 int main()
 {
-	int ret = test_decision_tree_predict();
+	int ret = test_libsvm_two_classification_train();
+	ret = test_libsvm_two_classification_predict();
 	
-	if (ret == 0) fprintf(stdout, "========== test success ==========\n");
-	else fprintf(stderr, "########## test fail ##########\n");
+	if (ret == 0)
+		fprintf(stdout, "========== test success ==========\n");
+	else
+		fprintf(stderr, "########## test fail ##########\n");
 
 	return 0;
 }

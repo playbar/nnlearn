@@ -14,8 +14,9 @@ static char* readline(FILE* input, int& max_line_len, char** line)
 {
 	if (fgets(*line, max_line_len, input) == nullptr) return nullptr;
 
-	int len{ 0 };
-	while (strrchr(*line, '\n') == nullptr) {
+	int len = 0;
+	while (strrchr(*line, '\n') == nullptr)
+	{
 		max_line_len *= 2;
 		*line = (char *)realloc(*line, max_line_len);
 		len = (int)strlen(*line);
@@ -267,15 +268,10 @@ static int read_problem(const char* input_file_name, svm_problem& prob, int& max
 int test_libsvm_two_classification_train()
 {
 	// reference: libsvm/svm-train.c
-#ifdef _MSC_VER
-	const std::string input_file_name{ "E:/GitCode/NN_Test/data/database/liver-disorders/liver-disorders_train.txt" },
-		output_file_name{ "E:/GitCode/NN_Test/data/database/liver-disorders/liver-disorders_train_scale.txt" },
-		svm_model{"E:/GitCode/NN_Test/data/svm.model"};
-#else
-	const std::string input_file_name{ "data/database/liver-disorders/liver-disorders_train.txt" },
-		output_file_name{ "data/database/liver-disorders/liver-disorders_train_scale.txt" },
-		svm_model{"data/svm.model"};
-#endif
+
+	const std::string input_file_name { "data/database/liver-disorders/liver-disorders_train.txt" };
+    const std::string output_file_name{ "data/database/liver-disorders/liver-disorders_train_scale.txt" };
+    const std::string svm_model{"data/svm.model"};
 
 	CHECK(0 == test_libsvm_scale(input_file_name.c_str(), output_file_name.c_str())); // data scale
 
@@ -379,17 +375,11 @@ static int predict(FILE* input, FILE* output, const svm_model* model, int& max_l
 int test_libsvm_two_classification_predict()
 {
 	// reference: libsvm/svm-predict.c
-#ifdef _MSC_VER
-	const std::string input_file_name{ "E:/GitCode/NN_Test/data/database/liver-disorders/liver-disorders_predict.txt" },
-		scale_file_name{ "E:/GitCode/NN_Test/data/database/liver-disorders/liver-disorders_predict_scale.txt" },
-		svm_model{ "E:/GitCode/NN_Test/data/svm.model" },
-		predict_result_file_name{ "E:/GitCode/NN_Test/data/svm_predict_result.txt" };
-#else
-	const std::string input_file_name{ "data/database/liver-disorders/liver-disorders_predict.txt" },
-		scale_file_name{ "data/database/liver-disorders/liver-disorders_predict_scale.txt" },
-		svm_model{ "data/svm.model" },
-		predict_result_file_name{ "data/svm_predict_result.txt" };
-#endif
+
+	const std::string input_file_name{ "data/database/liver-disorders/liver-disorders_predict.txt" };
+    const std::string scale_file_name{ "data/database/liver-disorders/liver-disorders_predict_scale.txt" };
+    const std::string svm_model{ "data/svm.model" };
+    const std::string predict_result_file_name{ "data/svm_predict_result.txt" };
 
 	CHECK(0 == test_libsvm_scale(input_file_name.c_str(), scale_file_name.c_str())); // data scale
 
