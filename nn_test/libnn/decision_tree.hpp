@@ -68,7 +68,7 @@ private:
 	int feature_length = 0;
 	int classes_num = 0;
 	int max_depth = 10; // maximum tree depth
-	int min_size = 10; // minimum node records
+	int min_size =  10; // minimum node records
 	int max_nodes = -1;
 };
 

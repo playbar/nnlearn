@@ -9,11 +9,8 @@
 int ORLFacestoImage()
 {
 	// Blog: http://blog.csdn.net/fengbingchun/article/details/79008891
-#ifdef _MSC_VER
-	const std::string path{ "E:/GitCode/NN_Test/data/database/ORL_Faces/" };
-#else
-	const std::string path{ "../../nn_test/data/database/ORL_Faces/" };
-#endif
+
+	const std::string path{ "data/database/ORL_Faces/" };
 	cv::Mat dst;
 	int height, width;
 
@@ -49,11 +46,7 @@ int ORLFacestoImage()
 	float factor = dst.cols * 1.f / new_width;
 	int new_height = dst.rows / factor;
 	cv::resize(dst, dst, cv::Size(new_width, new_height));
-#ifdef _MSC_VER
-	cv::imwrite("E:/GitCode/NN_Test/data/orl_faces_dataset.png", dst);
-#else
 	cv::imwrite("data/orl_faces_dataset.png", dst);
-#endif
 
 	return 0;
 }
@@ -222,11 +215,7 @@ int ImageToMNIST()
 {
 	// Blog: https://blog.csdn.net/fengbingchun/article/details/87890701
 	// read images
-#ifdef _MSC_VER
-	std::string filename_test_images = "E:/GitCode/NN_Test/data/database/MNIST/t10k-images.idx3-ubyte";
-#else
 	std::string filename_test_images = "data/database/MNIST/t10k-images.idx3-ubyte";
-#endif
 	const int number_of_test_images = 10000;
 	std::vector<cv::Mat> vec_test_images;
 
@@ -237,11 +226,7 @@ int ImageToMNIST()
 	}
 
 	// read labels
-#ifdef _MSC_VER
-	std::string filename_test_labels = "E:/GitCode/NN_Test/data/database/MNIST/t10k-labels.idx1-ubyte";
-#else
 	std::string filename_test_labels = "data/database/MNIST/t10k-labels.idx1-ubyte";
-#endif
 	std::vector<int> vec_test_labels(number_of_test_images);
 
 	read_Mnist_Label(filename_test_labels, vec_test_labels);
@@ -251,11 +236,8 @@ int ImageToMNIST()
 	const int image_number = 10000;
 	const int image_rows = 28;
 	const int image_cols = 28;
-#ifdef _MSC_VER
-	const std::string images_save_file_name = "E:/GitCode/NN_Test/data/new_t10k-images.idx3-ubyte";
-#else
+
 	const std::string images_save_file_name = "data/new_t10k-images.idx3-ubyte";
-#endif
 
 	if (write_images_to_file(images_save_file_name, vec_test_images, image_magic_number,
 		image_number, image_rows, image_cols) != 0) {
@@ -266,11 +248,7 @@ int ImageToMNIST()
 	// write labels
 	const int label_magic_number = 2049; // 0x00000801
 	const int label_number = 10000;
-#ifdef _MSC_VER
-	const std::string labels_save_file_name = "E:/GitCode/NN_Test/data/new_t10k-labels.idx1-ubyte";
-#else
 	const std::string labels_save_file_name = "data/new_t10k-labels.idx1-ubyte";
-#endif
 
 	if (write_labels_to_file(labels_save_file_name, vec_test_labels, label_magic_number, label_number) != 0) {
 		fprintf(stderr, "Error: write labels to file fail\n");
@@ -286,22 +264,16 @@ int MNISTtoImage()
 	// reference: http://eric-yuan.me/cpp-read-mnist/
 	// test images and test labels
 	// read MNIST image into OpenCV Mat vector
-#ifdef _MSC_VER
-	std::string filename_test_images = "E:/GitCode/NN_Test/data/database/MNIST/t10k-images.idx3-ubyte";
-#else
+
 	std::string filename_test_images = "data/database/MNIST/t10k-images.idx3-ubyte";
-#endif
 	int number_of_test_images = 10000;
 	std::vector<cv::Mat> vec_test_images;
 
 	read_Mnist(filename_test_images, vec_test_images);
 
 	// read MNIST label into int vector
-#ifdef _MSC_VER
-	std::string filename_test_labels = "E:/GitCode/NN_Test/data/database/MNIST/t10k-labels.idx1-ubyte";
-#else
+
 	std::string filename_test_labels = "data/database/MNIST/t10k-labels.idx1-ubyte";
-#endif
 	std::vector<int> vec_test_labels(number_of_test_images);
 
 	read_Mnist_Label(filename_test_labels, vec_test_labels);
@@ -316,11 +288,8 @@ int MNISTtoImage()
 	std::fill(&count_digits[0], &count_digits[0] + 10, 0);
 
 	fprintf(stdout, "##### Warning: need to create E:/GitCode/NN_Test/data/tmp/MNIST/test_images directory by yourself in windows.\n");
-#ifdef _MSC_VER
-	std::string save_test_images_path = "E:/GitCode/NN_Test/data/tmp/MNIST/test_images/";
-#else
+
 	std::string save_test_images_path = "data/tmp/MNIST/test_images/";
-#endif
 
 	for (int i = 0; i < vec_test_images.size(); i++) {
 		int number = vec_test_labels[i];
@@ -332,22 +301,17 @@ int MNISTtoImage()
 
 	// train images and train labels
 	// read MNIST image into OpenCV Mat vector
-#ifdef _MSC_VER
-	std::string filename_train_images = "E:/GitCode/NN_Test/data/database/MNIST/train-images.idx3-ubyte";
-#else
+
 	std::string filename_train_images = "data/database/MNIST/train-images.idx3-ubyte";
-#endif
+
 	int number_of_train_images = 60000;
 	std::vector<cv::Mat> vec_train_images;
 
 	read_Mnist(filename_train_images, vec_train_images);
 
 	// read MNIST label into int vector
-#ifdef _MSC_VER
-	std::string filename_train_labels = "E:/GitCode/NN_Test/data/database/MNIST/train-labels.idx1-ubyte";
-#else
+
 	std::string filename_train_labels = "data/database/MNIST/train-labels.idx1-ubyte";
-#endif
 	std::vector<int> vec_train_labels(number_of_train_images);
 
 	read_Mnist_Label(filename_train_labels, vec_train_labels);
@@ -361,11 +325,8 @@ int MNISTtoImage()
 	std::fill(&count_digits[0], &count_digits[0] + 10, 0);
 
 	fprintf(stdout, "##### Warning: need to create E:/GitCode/NN_Test/data/tmp/MNIST/train_images directory by yourself in windows.\n");
-#ifdef _MSC_VER
-	std::string save_train_images_path = "E:/GitCode/NN_Test/data/tmp/MNIST/train_images/";
-#else
+
 	std::string save_train_images_path = "data/tmp/MNIST/train_images/";
-#endif
 
 	for (int i = 0; i < vec_train_images.size(); i++) {
 		int number = vec_train_labels[i];
@@ -376,11 +337,9 @@ int MNISTtoImage()
 	}
 
 	// save big imags
-#ifdef _MSC_VER
-	std::string images_path = "E:/GitCode/NN_Test/data/tmp/MNIST/train_images/";
-#else
+
 	std::string images_path = "data/tmp/MNIST/train_images/";
-#endif
+
 	int width = 28 * 20;
 	int height = 28 * 10;
 	cv::Mat dst(height, width, CV_8UC1);

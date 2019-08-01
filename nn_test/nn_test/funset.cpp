@@ -350,11 +350,7 @@ void normalize(const std::vector<float>& src, std::vector<unsigned char>& dst)
 
 int test_pca()
 {
-#ifdef _MSC_VER
-	const std::string image_path{ "E:/GitCode/NN_Test/data/database/ORL_Faces/" };
-#else
 	const std::string image_path{ "data/database/ORL_Faces/" };
-#endif
 	const std::string image_name{ "1.pgm" };
 
 	std::vector<cv::Mat> images;
@@ -368,11 +364,8 @@ int test_pca()
 
 		images.emplace_back(mat);
 	}
-#ifdef _MSC_VER
-	save_images(images, "E:/GitCode/NN_Test/data/pca_src.jpg", 5);
-#else
+
 	save_images(images, "data/pca_src.jpg", 5);
-#endif
 
 	cv::Mat data(images.size(), images[0].rows * images[0].cols, CV_32FC1);
 	for (int i = 0; i < images.size(); ++i) {
@@ -389,11 +382,7 @@ int test_pca()
 		memcpy(data_[i].data(), data.row(i).data, sizeof(float)* features_length);
 	}
 
-#ifdef _MSC_VER	
-	const std::string save_model_file{ "E:/GitCode/NN_Test/data/pca.model" };
-#else
 	const std::string save_model_file{ "data/pca.model" };
-#endif
 	ANN::PCA<float> pca;
 	pca.load_data(data_, labels);
 	double retained_variance{ 0.95 };
@@ -414,12 +403,8 @@ int test_pca()
 		cv::Mat tmp(images[i].rows, images[i].cols, CV_8UC1, dst.data());
 		tmp.copyTo(result[i]);
 	}
-#ifdef _MSC_VER
-	save_images(result, "E:/GitCode/NN_Test/data/pca_result.jpg", 5);
-#else
-	save_images(result, "data/pca_result.jpg", 5);
-#endif
 
+	save_images(result, "data/pca_result.jpg", 5);
 	return 0;
 }
 
@@ -462,11 +447,8 @@ int test_decision_tree_train()
 	} */
 
 	// banknote authentication dataset
-#ifdef _MSC_VER
-	const char* file_name = "E:/GitCode/NN_Test/data/database/BacknoteDataset/data_banknote_authentication.txt";
-#else
+
 	const char* file_name = "data/database/BacknoteDataset/data_banknote_authentication.txt";
-#endif
 
 	std::vector<std::vector<float>> data;
 	int ret = read_txt_file<float>(file_name, data, ',', 1372, 5);
@@ -477,17 +459,14 @@ int test_decision_tree_train()
 
 	//fprintf(stdout, "data size: rows: %d\n", data.size());
 
-	const std::vector<float> classes{ 0.f, 1.f };
+	const std::vector<float> classes{ 0.0f, 1.0f };
 	ANN::DecisionTree<float> dt;
 	dt.init(data, classes);
 	dt.set_max_depth(6);
 	dt.set_min_size(10);
 	dt.train();
-#ifdef _MSC_VER
-	const char* model_name = "E:/GitCode/NN_Test/data/decision_tree.model";
-#else
+
 	const char* model_name = "data/decision_tree.model";
-#endif
 	dt.save_model(model_name);
 
 	return 0;
@@ -495,22 +474,20 @@ int test_decision_tree_train()
 
 int test_decision_tree_predict()
 {
-#ifdef _MSC_VER
-	const char* model_name = "E:/GitCode/NN_Test/data/decision_tree.model";
-#else
 	const char* model_name = "data/decision_tree.model";
-#endif
 	ANN::DecisionTree<float> dt;
 	dt.load_model(model_name);
 	int max_depth = dt.get_max_depth();
 	int min_size = dt.get_min_size();
 	fprintf(stdout, "max_depth: %d, min_size: %d\n", max_depth, min_size);
 
-	std::vector<std::vector<float>> test {{-2.5526f,-7.3625f,6.9255f,-0.66811f,1.f},
-				       {-4.5531f,-12.5854f,15.4417f,-1.4983f,1.f},
-				       {4.0948f,-2.9674f,2.3689f,0.75429f,0.f},
-				       {-1.0401f,9.3987f,0.85998f,-5.3336f,0.f},
-				       {1.0637f,3.6957f,-4.1594f,-1.9379f,1.f}};
+	std::vector<std::vector<float>> test {
+	    {-2.5526f,-7.3625f,6.9255f,-0.66811f,1.f},
+        {-4.5531f,-12.5854f,15.4417f,-1.4983f,1.f},
+        {4.0948f,-2.9674f,2.3689f,0.75429f,0.f},
+        {-1.0401f,9.3987f,0.85998f,-5.3336f,0.f},
+        {1.0637f,3.6957f,-4.1594f,-1.9379f,1.f}
+	};
 	for (const auto& row : test) {	
 		float ret = dt.predict(row);
 		fprintf(stdout, "predict result: %.1f, actual value: %.1f\n", ret, row[4]);
@@ -522,11 +499,8 @@ int test_decision_tree_predict()
 // =========================== KNN(K-Nearest Neighbor) ======================
 int test_knn_classifier_predict()
 {
-#ifdef _MSC_VER
-	const std::string image_path{ "E:/GitCode/NN_Test/data/images/digit/handwriting_0_and_1/" };
-#else
 	const std::string image_path{ "data/images/digit/handwriting_0_and_1/" };
-#endif
+
 	const int K{ 3 };
 
 	cv::Mat tmp = cv::imread(image_path + "0_1.jpg", 0);
