@@ -245,6 +245,18 @@ int ImageToMNIST()
 		return -1;
 	}
 
+    cv::String title("image0");
+    cv::imshow(title, vec_test_images[0]);
+    cv::moveWindow(title,1000,100);
+    cv::resizeWindow(title, 640, 480);
+    cv::waitKey(0);
+
+//    for( int i = 0; i < vec_test_images.size(); ++i )
+//    {
+//        std::string save_image_name = "data/img/" + std::to_string(i) + ".png";
+//        cv::imwrite(save_image_name, vec_test_images[i]);
+//    }
+
 	// write labels
 	const int label_magic_number = 2049; // 0x00000801
 	const int label_number = 10000;
@@ -492,24 +504,17 @@ void read_cifar_100(const std::string& bin_name, const std::string& image_save_p
 int CIFAR10toImage()
 {
 	// Blog: http://blog.csdn.net/fengbingchun/article/details/53560637
-#ifdef _MSC_VER
-	std::string images_path = "E:/GitCode/NN_Test/data/database/CIFAR/CIFAR-10/";
-#else
+
 	std::string images_path = "data/database/CIFAR/CIFAR-10/";
-#endif
-	
+
 	fprintf(stdout, "##### Warning: need to create E:/GitCode/NN_Test/data/tmp/cifar-10_train directory by yourself in windows.\n");
 	// train image
 	std::vector<int> label_count(10, 0);
-	for (int i = 1; i <= 5; i++) {
+	for (int i = 1; i <= 5; i++)
+	{
 		std::string bin_name = images_path + "data_batch_" + std::to_string(i) + ".bin";
-#ifdef _MSC_VER
-		std::string image_save_path = "E:/GitCode/NN_Test/data/tmp/cifar-10_train/";
-#else
 		std::string image_save_path = "data/tmp/cifar-10_train/";
-#endif
 		int image_count = 10000;
-
 		read_cifar_10(bin_name, image_save_path, image_count, label_count);
 	}
 
@@ -518,27 +523,24 @@ int CIFAR10toImage()
 	std::string bin_name = images_path + "test_batch.bin";
 
 	fprintf(stdout, "##### Warning: need to create E:/GitCode/NN_Test/data/tmp/cifar-10_test directory by yourself in windows.\n");
-#ifdef _MSC_VER
-	std::string image_save_path = "E:/GitCode/NN_Test/data/tmp/cifar-10_test/";
-#else
+
 	std::string image_save_path = "data/tmp/cifar-10_test/";
-#endif
 	int image_count = 10000;
 
 	read_cifar_10(bin_name, image_save_path, image_count, label_count);
 
 	// save big imags
-#ifdef _MSC_VER
-	images_path = "E:/GitCode/NN_Test/data/tmp/cifar-10_train/";
-#else
+
 	images_path = "data/tmp/cifar-10_train/";
-#endif
+
 	int width = 32 * 20;
 	int height = 32 * 10;
 	cv::Mat dst(height, width, CV_8UC3);
 
-	for (int i = 0; i < 10; i++) {
-		for (int j = 1; j <= 20; j++) {
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 1; j <= 20; j++)
+		{
 			int x = (j - 1) * 32;
 			int y = i * 32;
 			cv::Mat part = dst(cv::Rect(x, y, 32, 32));
@@ -571,15 +573,14 @@ int CIFAR10toImage()
 int CIFAR100toImage()
 {
 	// Blog: http://blog.csdn.net/fengbingchun/article/details/53560637
-#ifdef _MSC_VER
-	std::string images_path = "E:/GitCode/NN_Test/data/database/CIFAR/CIFAR-100/";
-#else
+
 	std::string images_path = "data/database/CIFAR/CIFAR-100/";
-#endif
+
 	// train image
 	std::vector<std::vector<int>> label_count;
 	label_count.resize(20);
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 20; i++)
+	{
 		label_count[i].resize(100);
 		std::fill(&label_count[i][0], &label_count[i][0] + 100, 0);
 	}
@@ -587,37 +588,32 @@ int CIFAR100toImage()
 	std::string bin_name = images_path + "train.bin";
 	fprintf(stdout, "##### Warning: need to create E:/GitCode/NN_Test/data/tmp/cifar-100_train directory by yourself in windows.\n");
 	fprintf(stdout, "##### Warning: need to decompress E:/GitCode/NN_Test/data/database/CIFAR/CIFAR-100/train.7z.* files by yourself in windows.\n");
-#ifdef _MSC_VER
-	std::string image_save_path = "E:/GitCode/NN_Test/data/tmp/cifar-100_train/";
-#else
+
 	std::string image_save_path = "data/tmp/cifar-100_train/";
-#endif
+
 	int image_count = 50000;
 
 	read_cifar_100(bin_name, image_save_path, image_count, label_count);
 
 	// test image
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 20; i++)
+	{
 		label_count[i].resize(100);
 		std::fill(&label_count[i][0], &label_count[i][0] + 100, 0);
 	}
 	bin_name = images_path + "test.bin";
 	fprintf(stdout, "##### Warning: need to create E:/GitCode/NN_Test/data/tmp/cifar-100_test directory by yourself in windows.\n");
-#ifdef _MSC_VER
-	image_save_path = "E:/GitCode/NN_Test/data/tmp/cifar-100_test/";
-#else
+
 	image_save_path = "data/tmp/cifar-100_test/";
-#endif
+
 	image_count = 10000;
 
 	read_cifar_100(bin_name, image_save_path, image_count, label_count);
 
 	// save big imags
-#ifdef _MSC_VER
-	images_path = "E:/GitCode/NN_Test/data/tmp/cifar-100_train/";
-#else
+
 	images_path = "data/tmp/cifar-100_train/";
-#endif
+
 	int width = 32 * 20;
 	int height = 32 * 100;
 	cv::Mat dst(height, width, CV_8UC3);
